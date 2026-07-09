@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Bonio Boost — Photo Booth Prototype</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@300;400;500;600;700;800&family=Sora:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tabler-icons/3.24.0/tabler-icons.min.css" />
+<style>
+  *{box-sizing:border-box;margin:0;padding:0;}
+  :root{
+    --ink:#f5f2ff;--ink-dim:rgba(245,242,255,.70);--ink-faint:rgba(245,242,255,.44);
+    --accent:#b39dff;--good:#5eead4;--bad:#fb7185;--warn:#fbbf24;
+    --glass:rgba(255,255,255,.09);--glass-2:rgba(255,255,255,.15);
+    --stroke:rgba(255,255,255,.22);--stroke-soft:rgba(255,255,255,.12);
+  }
+  html,body{height:100%;}
+  body{font-family:"Noto Sans Thai","Sora",system-ui,sans-serif;color:var(--ink);background:#09091a;min-height:100vh;overflow-x:hidden;-webkit-font-smoothing:antialiased;}
+  .bg{position:fixed;inset:0;z-index:0;overflow:hidden;
+    background:radial-gradient(1200px 820px at 14% 8%,#3d1f74 0%,transparent 55%),
+      radial-gradient(1050px 900px at 92% 18%,#0f5f72 0%,transparent 55%),
+      radial-gradient(1150px 950px at 68% 98%,#831f61 0%,transparent 55%),
+      linear-gradient(160deg,#0b0a20 0%,#111031 60%,#09091a 100%);}
+  .orb{position:absolute;border-radius:50%;filter:blur(64px);opacity:.55;mix-blend-mode:screen;animation:float 18s ease-in-out infinite;}
+  .orb.a{width:360px;height:360px;background:#8b5cf6;top:-70px;left:8%;}
+  .orb.b{width:320px;height:320px;background:#22d3ee;top:28%;right:5%;animation-delay:-6s;}
+  .orb.c{width:380px;height:380px;background:#f472b6;bottom:-90px;left:36%;animation-delay:-11s;}
+  @keyframes float{0%,100%{transform:translate(0,0) scale(1);}33%{transform:translate(32px,-26px) scale(1.06);}66%{transform:translate(-24px,20px) scale(.96);}}
+
+  .wrap{position:relative;z-index:1;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;padding:18px 16px 28px;}
+  .brandbar{display:flex;align-items:center;gap:10px;}
+  .brandbar .dot{width:28px;height:28px;border-radius:9px;background:linear-gradient(135deg,#b39dff,#22d3ee);display:grid;place-items:center;color:#0b0a1f;font-size:17px;}
+  .brandbar b{font-family:"Sora",sans-serif;font-weight:700;font-size:15px;letter-spacing:.4px;}
+  .brandbar span{color:var(--ink-faint);font-size:12.5px;}
+
+  .glass{background:var(--glass);backdrop-filter:blur(24px) saturate(180%);-webkit-backdrop-filter:blur(24px) saturate(180%);
+    border:1px solid var(--stroke);box-shadow:0 14px 46px rgba(0,0,0,.4),inset 0 1px 0 rgba(255,255,255,.32),inset 0 -1px 0 rgba(255,255,255,.05);}
+
+  .stage{display:flex;align-items:center;justify-content:center;}
+  .device{border-radius:34px;padding:16px;position:relative;transition:width .45s cubic-bezier(.4,0,.2,1),height .45s cubic-bezier(.4,0,.2,1);
+    background:linear-gradient(150deg,rgba(30,26,60,.55),rgba(14,12,34,.55));}
+  .device::after{content:"";position:absolute;border-radius:50%;background:rgba(255,255,255,.28);box-shadow:0 0 0 3px rgba(0,0,0,.18);}
+  .device.portrait::after{width:9px;height:9px;top:8px;left:50%;transform:translateX(-50%);}
+  .device.landscape::after{width:9px;height:9px;left:8px;top:50%;transform:translateY(-50%);}
+  .screen{width:100%;height:100%;border-radius:22px;overflow:hidden;position:relative;
+    background:rgba(9,9,24,.42);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);border:1px solid var(--stroke-soft);
+    display:flex;flex-direction:column;font-size:16px;}
+
+  .scr-top{display:flex;align-items:center;justify-content:space-between;padding:.85em 1.2em .3em;font-size:.72em;color:var(--ink-dim);flex:0 0 auto;}
+  .scr-top .l{display:flex;align-items:center;gap:.4em;font-weight:600;color:var(--ink);}
+  .scr-top .r{display:flex;align-items:center;gap:.5em;}
+  .scr-body{flex:1 1 auto;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.85em;padding:.6em 1.5em 1em;text-align:center;overflow-y:auto;min-height:0;}
+  .scr-body::-webkit-scrollbar{width:0;height:0;}
+  .scr-foot{flex:0 0 auto;padding:.6em 1.2em .95em;color:var(--ink-faint);font-size:.74em;text-align:center;display:flex;align-items:center;justify-content:center;gap:.4em;}
+
+  .h1{font-family:"Sora","Noto Sans Thai",sans-serif;font-weight:700;font-size:2em;line-height:1.22;letter-spacing:.2px;}
+  .h2{font-family:"Sora","Noto Sans Thai",sans-serif;font-weight:600;font-size:1.5em;line-height:1.25;}
+  .sub{color:var(--ink-dim);font-size:1.02em;line-height:1.55;font-weight:400;}
+  .hero-ico{font-size:3.4em;color:var(--accent);line-height:1;}
+
+  .btn{font-family:inherit;cursor:pointer;border:1px solid var(--stroke);background:var(--glass-2);color:var(--ink);
+    padding:.82em 1.6em;border-radius:999px;font-size:1.02em;font-weight:600;transition:transform .12s,background .2s,filter .2s;
+    backdrop-filter:blur(8px);display:inline-flex;align-items:center;gap:.5em;justify-content:center;min-height:2.9em;}
+  .btn i{font-size:1.15em;}
+  .btn:hover{background:rgba(255,255,255,.22);}
+  .btn:active{transform:scale(.97);}
+  .btn.primary{background:linear-gradient(135deg,#ffffff,#ece4ff);color:#241146;border-color:transparent;box-shadow:0 10px 28px rgba(179,157,255,.45);}
+  .btn.primary:hover{filter:brightness(1.04);}
+  .btn.ghost{background:transparent;border-color:var(--stroke-soft);color:var(--ink-dim);}
+  .btn.lg{padding:1.05em 2.1em;font-size:1.18em;min-height:3.4em;}
+  .btn-row{display:flex;gap:.7em;flex-wrap:wrap;justify-content:center;}
+
+  .pill{display:inline-flex;align-items:center;gap:.4em;padding:.5em 1em;border-radius:999px;background:var(--glass);border:1px solid var(--stroke-soft);font-size:.92em;color:var(--ink-dim);font-weight:500;}
+  .pill.good{color:var(--good);border-color:rgba(94,234,212,.35);}
+
+  .frames{display:grid;gap:.8em;width:100%;}
+  .device.portrait .frames{grid-template-columns:repeat(2,1fr);}
+  .device.landscape .frames{grid-template-columns:repeat(4,1fr);}
+  .fcard{cursor:pointer;border-radius:1em;padding:.85em .7em;background:var(--glass);border:1px solid var(--stroke-soft);
+    display:flex;flex-direction:column;align-items:center;gap:.55em;transition:transform .14s,border-color .2s,background .2s;}
+  .fcard:hover{transform:translateY(-3px);background:var(--glass-2);border-color:var(--stroke);}
+  .fcard:active{transform:scale(.97);}
+  .mini{background:rgba(255,255,255,.92);border-radius:.35em;padding:.3em;display:grid;gap:.18em;box-shadow:0 6px 16px rgba(0,0,0,.28);}
+  .device.portrait .mini{width:3.6em;height:4.8em;}
+  .device.landscape .mini{width:4.4em;height:3em;}
+  .mini i{background:linear-gradient(135deg,#c4b5fd,#93c5fd);border-radius:.14em;}
+  .fname{font-size:.92em;font-weight:600;}
+  .fshots{font-size:.76em;color:var(--ink-faint);}
+
+  .cam{width:100%;flex:1 1 auto;border-radius:1.1em;position:relative;overflow:hidden;min-height:0;
+    background:linear-gradient(140deg,#1d2757,#3c2056);border:1px solid var(--stroke-soft);display:grid;place-items:center;}
+  .cam .cambadge{position:absolute;top:.7em;left:.85em;font-size:.72em;color:rgba(255,255,255,.75);display:flex;align-items:center;gap:.35em;}
+  .cam .rec{width:.5em;height:.5em;border-radius:50%;background:#fb7185;animation:blink 1s infinite;}
+  @keyframes blink{50%{opacity:.25;}}
+  .countbubble{width:5em;height:5em;border-radius:50%;display:grid;place-items:center;background:rgba(255,255,255,.16);
+    backdrop-filter:blur(6px);border:.14em solid rgba(255,255,255,.55);font-family:"Sora",sans-serif;font-weight:800;font-size:1em;box-shadow:0 10px 34px rgba(0,0,0,.3);}
+  .countbubble span{font-size:3em;line-height:1;color:#fff;}
+  .flashwhite{position:absolute;inset:0;background:#fff;animation:flash .28s ease-out;z-index:5;}
+  @keyframes flash{from{opacity:.95;}to{opacity:0;}}
+  .shotthumbs{display:flex;gap:.4em;flex-wrap:wrap;justify-content:center;}
+  .sthumb{width:2.2em;height:2.2em;border-radius:.45em;border:1px solid var(--stroke-soft);}
+  .sthumb.empty{background:rgba(255,255,255,.07);}
+
+  .photo{background:#fff;border-radius:.5em;padding:.55em;box-shadow:0 16px 44px rgba(0,0,0,.42);display:flex;flex-direction:column;gap:.4em;}
+  .device.portrait .photo{width:9.5em;}
+  .device.landscape .photo{width:13em;}
+  .photo .cells{display:grid;gap:.32em;}
+  .photo .cells b{border-radius:.25em;aspect-ratio:1/1;display:block;}
+  .photo .cap{font-family:"Sora",sans-serif;font-size:.55em;color:#6b21a8;letter-spacing:.15em;text-align:center;font-weight:700;}
+
+  .filters{display:flex;gap:.5em;flex-wrap:wrap;justify-content:center;}
+  .fchip{cursor:pointer;padding:.55em 1.1em;border-radius:999px;font-size:.92em;background:var(--glass);border:1px solid var(--stroke-soft);color:var(--ink-dim);transition:.15s;font-weight:500;}
+  .fchip.on{background:#fff;color:#241146;font-weight:700;border-color:transparent;}
+
+  .qrbox{background:#fff;border-radius:1em;padding:.85em;display:inline-flex;flex-direction:column;align-items:center;gap:.5em;box-shadow:0 14px 34px rgba(0,0,0,.38);}
+  .qr{display:grid;grid-template-columns:repeat(11,1fr);gap:.13em;width:8.4em;height:8.4em;}
+  .qr i{background:#141130;border-radius:.06em;}
+  .qr i.b0{background:transparent;}
+  .qrbox .qcap{font-size:.78em;color:#4c1d95;font-weight:700;display:flex;align-items:center;gap:.3em;}
+
+  .prog{width:80%;height:.7em;border-radius:999px;background:rgba(255,255,255,.15);overflow:hidden;border:1px solid var(--stroke-soft);}
+  .prog b{display:block;height:100%;width:0;border-radius:999px;background:linear-gradient(90deg,#b39dff,#22d3ee);transition:width .2s linear;}
+  .spinner{width:3.2em;height:3.2em;border-radius:50%;border:.22em solid rgba(255,255,255,.18);border-top-color:#fff;animation:spin 1s linear infinite;}
+  @keyframes spin{to{transform:rotate(360deg);}}
+
+  .banner{width:100%;border-radius:.85em;padding:.75em 1em;font-size:.9em;display:flex;gap:.6em;align-items:flex-start;text-align:left;line-height:1.5;}
+  .banner.bad{background:rgba(251,113,133,.16);border:1px solid rgba(251,113,133,.42);color:#ffdbe1;}
+  .banner.good{background:rgba(94,234,212,.14);border:1px solid rgba(94,234,212,.42);color:#ccfff4;}
+  .banner i{font-size:1.3em;flex:0 0 auto;margin-top:.05em;}
+
+  .idleov{position:absolute;inset:0;z-index:20;display:flex;align-items:center;justify-content:center;padding:1.5em;
+    background:rgba(9,9,22,.62);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);animation:fade .25s ease;}
+  @keyframes fade{from{opacity:0;}to{opacity:1;}}
+  .idlecard{text-align:center;display:flex;flex-direction:column;align-items:center;gap:.9em;max-width:88%;}
+  .idlering{width:6em;height:6em;border-radius:50%;display:grid;place-items:center;border:.22em solid rgba(255,255,255,.28);
+    position:relative;background:rgba(255,255,255,.08);}
+  .idlering span{font-family:"Sora",sans-serif;font-weight:800;font-size:2.6em;color:#fff;}
+
+  .stepper{display:flex;align-items:center;gap:.4em;justify-content:center;flex-wrap:wrap;max-width:380px;}
+  .stepper .d{width:7px;height:7px;border-radius:50%;background:rgba(255,255,255,.24);transition:.2s;}
+  .stepper .d.on{background:#fff;box-shadow:0 0 8px rgba(255,255,255,.7);width:20px;border-radius:999px;}
+  .stepper .d.done{background:var(--accent);}
+
+  .dock{border-radius:20px;padding:13px 16px;display:flex;flex-wrap:wrap;align-items:center;gap:14px;max-width:900px;justify-content:center;}
+  .dock-title{font-size:11px;color:var(--ink-faint);width:100%;text-align:center;margin-bottom:-3px;letter-spacing:.5px;text-transform:uppercase;}
+  .ctrl{display:flex;flex-direction:column;gap:5px;}
+  .ctrl label{font-size:11px;color:var(--ink-faint);padding-left:4px;}
+  .seg{display:inline-flex;padding:4px;border-radius:999px;background:rgba(0,0,0,.24);border:1px solid var(--stroke-soft);}
+  .seg button{font-family:inherit;border:0;background:transparent;color:var(--ink-dim);padding:7px 13px;border-radius:999px;cursor:pointer;font-size:12.5px;transition:.15s;display:flex;align-items:center;gap:5px;}
+  .seg button.on{background:rgba(255,255,255,.94);color:#241146;font-weight:600;}
+  .seg.good button.on{background:#5eead4;color:#053b32;}
+  .seg.bad button.on{background:#fb7185;color:#490915;}
+  .dock .sep{width:1px;height:38px;background:var(--stroke-soft);}
+  .dockbtn{font-family:inherit;cursor:pointer;border:1px solid var(--stroke-soft);background:var(--glass);color:var(--ink);padding:9px 14px;border-radius:12px;font-size:12.5px;display:inline-flex;align-items:center;gap:6px;transition:.15s;}
+  .dockbtn:hover{background:var(--glass-2);}
+</style>
+</head>
+<body>
+<div class="bg"><div class="orb a"></div><div class="orb b"></div><div class="orb c"></div></div>
+
+<div class="wrap">
+  <div class="brandbar"><span class="dot"><i class="ti ti-aperture"></i></span><b>BONIO BOOST</b><span>· photo booth prototype</span></div>
+
+  <div class="stage"><div class="device portrait" id="device"><div class="screen" id="screen"></div></div></div>
+
+  <div class="stepper" id="stepper"></div>
+
+  <div class="dock glass">
+    <div class="dock-title">แผงทดลอง · ปรับได้ตลอดเวลา</div>
+    <div class="ctrl"><label>แนวจอ</label>
+      <div class="seg" id="segOri">
+        <button data-ori="portrait" class="on"><i class="ti ti-rectangle-vertical"></i>แนวตั้ง</button>
+        <button data-ori="landscape"><i class="ti ti-rectangle"></i>แนวนอน</button>
+      </div>
+    </div>
+    <div class="sep"></div>
+    <div class="ctrl"><label>โหมดร้าน</label>
+      <div class="seg" id="segMode"><button data-mode="paid" class="on">มีจ่ายเงิน</button><button data-mode="free">ฟรี / event</button></div>
+    </div>
+    <div class="sep"></div>
+    <div class="ctrl"><label>ผลการจ่ายเงิน</label>
+      <div class="seg good" id="segPay"><button data-pay="success" class="on">สำเร็จ</button><button data-pay="fail">ไม่สำเร็จ</button></div>
+    </div>
+    <div class="sep"></div>
+    <div class="ctrl"><label>ผลการพิมพ์</label>
+      <div class="seg good" id="segPrint"><button data-print="success" class="on">สำเร็จ</button><button data-print="fail">ขัดข้อง</button></div>
+    </div>
+    <div class="sep"></div>
+    <button class="dockbtn" id="btnIdle"><i class="ti ti-clock-pause"></i>จำลอง idle</button>
+    <button class="dockbtn" id="btnRestart"><i class="ti ti-refresh"></i>เริ่มใหม่</button>
+  </div>
+</div>
+
+<script>
+const FRAMES={
+  portrait:[
+    {id:'ps4',name:'สตริป 4 ช่อง',shots:4,cols:1,rows:4},
+    {id:'pg4',name:'ตาราง 2×2',shots:4,cols:2,rows:2},
+    {id:'pd2',name:'คู่ 2 ช่อง',shots:2,cols:1,rows:2},
+    {id:'p1',name:'ภาพเดี่ยว',shots:1,cols:1,rows:1}
+  ],
+  landscape:[
+    {id:'lt3',name:'3 ช่องแนวนอน',shots:3,cols:3,rows:1},
+    {id:'lg4',name:'ตาราง 2×2',shots:4,cols:2,rows:2},
+    {id:'ld2',name:'คู่ 2 ช่อง',shots:2,cols:2,rows:1},
+    {id:'l1',name:'ภาพเดี่ยว',shots:1,cols:1,rows:1}
+  ]
+};
+const FILTERS=[
+  {id:'none',name:'ต้นฉบับ',css:'none'},
+  {id:'bw',name:'ขาวดำ',css:'grayscale(1)'},
+  {id:'vin',name:'วินเทจ',css:'sepia(.55) contrast(1.05) saturate(1.1)'},
+  {id:'pop',name:'สดใส',css:'saturate(1.6) brightness(1.06)'}
+];
+const SHOT_COLORS=[
+  'linear-gradient(135deg,#f9a8d4,#a78bfa)','linear-gradient(135deg,#93c5fd,#5eead4)',
+  'linear-gradient(135deg,#fcd34d,#fb7185)','linear-gradient(135deg,#c4b5fd,#818cf8)',
+  'linear-gradient(135deg,#6ee7b7,#3b82f6)','linear-gradient(135deg,#fda4af,#f59e0b)'
+];
+const PRICE=120;
+const JOURNEY=['attract','frame','quantity','pay','getready','capture','preview','confirm','printing','collect','thankyou'];
+const IDLE_STEPS=new Set(['frame','quantity','pay','preview','confirm']);
+const IDLE_MS=15000;
+
+let S={orientation:'portrait',mode:'paid',payScenario:'success',printScenario:'success',
+  step:'attract',frame:null,qty:1,filter:'none',shotIndex:0,shots:[],capPhase:'count',count:3,printError:false,progress:0,idleActive:false};
+let timers=[],idleT=null,idleIV=null,idleCount=10;
+const device=document.getElementById('device');
+const screenEl=document.getElementById('screen');
+const stepperEl=document.getElementById('stepper');
+
+function clearTimers(){timers.forEach(t=>{clearTimeout(t);clearInterval(t);});timers=[];}
+function after(ms,fn){const t=setTimeout(fn,ms);timers.push(t);return t;}
+function go(step){S.step=step;render();}
+function clock(){const d=new Date();return d.getHours().toString().padStart(2,'0')+':'+d.getMinutes().toString().padStart(2,'0');}
+
+function sizeDevice(){
+  const vw=window.innerWidth,vh=window.innerHeight;
+  const availH=Math.max(360,vh-240),availW=vw-40;
+  let w,h;
+  if(S.orientation==='portrait'){h=Math.min(availH,900);w=h*0.75;if(w>availW){w=availW;h=w/0.75;}}
+  else{w=Math.min(availW,1060);h=w*0.75;if(h>availH){h=availH;w=h/0.75;}}
+  device.style.width=Math.round(w)+'px';device.style.height=Math.round(h)+'px';
+  const base=Math.max(14,Math.min(30,Math.round((S.orientation==='portrait'?w:h)/24)));
+  screenEl.style.fontSize=base+'px';
+}
+
+function topBar(){return `<div class="scr-top">
+    <div class="l"><i class="ti ti-aperture"></i>Bonio Booth</div>
+    <div class="r"><i class="ti ti-wifi"></i><i class="ti ti-battery-3"></i><span>${clock()}</span></div>
+  </div>`;}
+function miniLayout(f){let c='';for(let i=0;i<f.shots;i++)c+='<i></i>';
+  return `<div class="mini" style="grid-template-columns:repeat(${f.cols},1fr);grid-template-rows:repeat(${f.rows},1fr)">${c}</div>`;}
+function qrSvg(){let c='';for(let i=0;i<121;i++){const v=Math.abs((Math.sin(i*12.9898)*43758.5453)%1);c+='<i class="'+(v>.5?'':'b0')+'"></i>';}return `<div class="qr">${c}</div>`;}
+function photoComposite(){const f=S.frame,fil=FILTERS.find(x=>x.id===S.filter).css;let c='';
+  for(let i=0;i<f.shots;i++)c+=`<b style="background:${S.shots[i]||SHOT_COLORS[i%6]}"></b>`;
+  return `<div class="photo"><div class="cells" style="grid-template-columns:repeat(${f.cols},1fr);filter:${fil}">${c}</div><div class="cap">BONIO · 09.07.26</div></div>`;}
+
+const STEP={
+  attract(){return `<div class="scr-body">
+    <div class="hero-ico"><i class="ti ti-aperture"></i></div>
+    <div class="h1">ยินดีต้อนรับ</div>
+    <div class="sub">เลือกกรอบ · ถ่ายรูปสนุก ๆ · พิมพ์ทันที<br/>เก็บความทรงจำสวย ๆ ไปด้วยกัน</div>
+    <button class="btn primary lg" data-act="start"><i class="ti ti-hand-finger"></i>แตะเพื่อเริ่ม</button>
+  </div><div class="scr-foot"><i class="ti ti-photo"></i> demo · ${S.mode==='free'?'โหมดฟรี / event':'มีค่าบริการ'}</div>`;},
+
+  frame(){let cards='';FRAMES[S.orientation].forEach(f=>{cards+=`<div class="fcard" data-act="selframe" data-id="${f.id}">${miniLayout(f)}<div class="fname">${f.name}</div><div class="fshots">${f.shots} ช็อต</div></div>`;});
+    return `<div class="scr-body" style="justify-content:flex-start;padding-top:.4em">
+      <div class="h2">เลือกกรอบที่ชอบ</div>
+      <div class="sub">กรอบจะกำหนดจำนวนช็อตให้อัตโนมัติ</div>
+      <div class="frames">${cards}</div>
+    </div><div class="scr-foot"><i class="ti ti-clock"></i> พักหน้าจอถ้าไม่มีการแตะ</div>`;},
+
+  quantity(){const total=S.qty*PRICE,f=S.frame;
+    return `<div class="scr-body">
+      <div class="h2">เลือกจำนวนพิมพ์</div>
+      ${miniLayout(f)}
+      <div class="sub">${f.name} · ${f.shots} ช็อต</div>
+      <div style="display:flex;align-items:center;gap:1.2em">
+        <button class="btn" data-act="qtyminus" style="width:2.6em;height:2.6em;padding:0;font-size:1.4em">−</button>
+        <div style="font-family:Sora,sans-serif;font-weight:800;font-size:2.6em;min-width:1.4em">${S.qty}</div>
+        <button class="btn" data-act="qtyplus" style="width:2.6em;height:2.6em;padding:0;font-size:1.4em">+</button>
+      </div>
+      ${S.mode==='paid'?`<div class="pill"><i class="ti ti-cash"></i> รวม ${total} บาท</div>`:`<div class="pill good"><i class="ti ti-gift"></i> ฟรี · งาน event</div>`}
+      <button class="btn primary lg" data-act="qtynext"><i class="ti ti-arrow-right"></i>${S.mode==='paid'?'ไปชำระเงิน':'ไปถ่ายรูป'}</button>
+    </div><div class="scr-foot"><i class="ti ti-clock"></i> idle 45–60 วิ</div>`;},
+
+  pay(){const total=S.qty*PRICE;
+    return `<div class="scr-body">
+      <div class="h2">สแกนเพื่อชำระเงิน</div>
+      <div class="qrbox">${qrSvg()}<div class="qcap">พร้อมเพย์ · ${total} บาท</div></div>
+      <div class="sub">สแกน QR ด้วยแอปธนาคาร<br/>หรือกดปุ่มด้านล่างเพื่อจำลอง</div>
+      <button class="btn primary" data-act="pay"><i class="ti ti-qrcode"></i>จำลองการชำระเงิน</button>
+      <button class="btn ghost" data-act="paycancel">ยกเลิก</button>
+    </div><div class="scr-foot"><i class="ti ti-clock"></i> 90–120 วิ · หยุดนับเมื่อเริ่มจ่าย</div>`;},
+
+  payproc(){return `<div class="scr-body">
+      <div class="spinner"></div>
+      <div class="h2">กำลังตรวจสอบการชำระเงิน…</div>
+      <div class="sub">กรุณารอสักครู่</div>
+    </div><div class="scr-foot">อย่าปิดหน้าจอนี้</div>`;},
+
+  payfail(){return `<div class="scr-body">
+      <div class="hero-ico" style="color:var(--bad)"><i class="ti ti-alert-triangle"></i></div>
+      <div class="h2">การชำระเงินไม่สำเร็จ</div>
+      <div class="banner bad"><i class="ti ti-info-circle"></i><div>ยอดเงินยังไม่เข้า อาจถูกยกเลิกหรือหมดเวลา ลองสแกนใหม่อีกครั้ง หรือแจ้งพนักงาน</div></div>
+      <div class="btn-row"><button class="btn primary" data-act="payretry"><i class="ti ti-refresh"></i>ลองใหม่</button><button class="btn ghost" data-act="paycancel">ยกเลิก</button></div>
+    </div><div class="scr-foot">ปุ่มยกเลิก = กลับหน้าเริ่ม</div>`;},
+
+  getready(){return `<div class="scr-body">
+      <div class="hero-ico" style="color:var(--good)"><i class="ti ti-mood-smile"></i></div>
+      <div class="h1">เตรียมตัวให้พร้อม!</div>
+      <div class="sub">จัดท่าโพสสวย ๆ · มองที่กล้อง<br/>กำลังจะเริ่มนับถอยหลัง</div>
+      <button class="btn primary lg" data-act="ready"><i class="ti ti-player-play"></i>พร้อมแล้ว</button>
+    </div><div class="scr-foot">${S.frame.shots} ช็อต · เริ่มอัตโนมัติใน 2 วิ</div>`;},
+
+  capture(){const f=S.frame;let thumbs='';
+    for(let i=0;i<f.shots;i++)thumbs+=`<div class="sthumb ${S.shots[i]?'':'empty'}" style="${S.shots[i]?'background:'+S.shots[i]:''}"></div>`;
+    let mid='';
+    if(S.capPhase==='count')mid=`<div class="cam"><div class="cambadge"><span class="rec"></span>LIVE</div><div class="countbubble"><span>${S.count}</span></div></div>`;
+    else if(S.capPhase==='flash')mid=`<div class="cam"><div class="flashwhite"></div><div style="width:100%;height:100%;background:${S.shots[S.shotIndex]}"></div></div>`;
+    else mid=`<div class="cam"><div style="width:100%;height:100%;background:${S.shots[S.shotIndex]};display:grid;place-items:center"><i class="ti ti-check" style="font-size:2.6em;color:#fff"></i></div></div>`;
+    return `<div class="scr-body" style="justify-content:flex-start;padding-top:.5em;gap:.7em">
+      <div class="pill"><i class="ti ti-camera"></i> ช็อตที่ ${S.shotIndex+1} / ${f.shots}</div>
+      ${mid}
+      <div class="shotthumbs">${thumbs}</div>
+      ${S.capPhase==='review'?`<div class="btn-row"><button class="btn" data-act="retake"><i class="ti ti-refresh"></i>ถ่ายใหม่</button><button class="btn primary" data-act="nextshot"><i class="ti ti-arrow-right"></i>${S.shotIndex+1<f.shots?'ช็อตต่อไป':'ดูตัวอย่าง'}</button></div>`
+        :`<div class="sub" style="min-height:1.4em">${S.capPhase==='count'?'มองกล้อง ยิ้มไว้!':''}</div>`}
+    </div><div class="scr-foot">${S.capPhase==='review'?'รีเทคได้เฉพาะช่วงนี้':'ถ่ายอัตโนมัติเมื่อนับถึง 0'}</div>`;},
+
+  preview(){let chips='';FILTERS.forEach(fl=>{chips+=`<div class="fchip ${S.filter===fl.id?'on':''}" data-act="filter" data-id="${fl.id}">${fl.name}</div>`;});
+    return `<div class="scr-body">
+      <div class="h2">ตัวอย่าง / ใส่ฟิลเตอร์</div>
+      ${photoComposite()}
+      <div class="filters">${chips}</div>
+      <button class="btn primary lg" data-act="confirm"><i class="ti ti-arrow-right"></i>ไปต่อ</button>
+    </div><div class="scr-foot"><i class="ti ti-info-circle"></i> หน้านี้ไปข้างหน้าอย่างเดียว</div>`;},
+
+  confirm(){const total=S.qty*PRICE;
+    return `<div class="scr-body">
+      <div class="h2">ยืนยันการสั่งพิมพ์</div>
+      ${photoComposite()}
+      <div class="sub">${S.frame.name} · ${S.qty} ชุด${S.mode==='paid'?' · '+total+' บาท':''}</div>
+      <div class="btn-row"><button class="btn ghost" data-act="confirmback">ย้อนกลับ</button><button class="btn primary" data-act="print"><i class="ti ti-printer"></i>สั่งพิมพ์</button></div>
+    </div><div class="scr-foot">DNP DS-RX1HS</div>`;},
+
+  printing(){return `<div class="scr-body">
+      <div class="h2">กำลังพิมพ์…</div>
+      <div class="prog"><b id="pbar" style="width:${S.progress}%"></b></div>
+      <div class="sub">พิมพ์เสร็จใน ~8–15 วิ</div>
+      <div class="qrbox">${qrSvg()}<div class="qcap"><i class="ti ti-download"></i> สแกนโหลดไฟล์ได้เลย</div></div>
+      <div class="sub" style="color:var(--good)">QR ขึ้นแล้ว — ดาวน์โหลดระหว่างรอได้เลย</div>
+    </div><div class="scr-foot">ไฟล์ดิจิทัลพร้อมแม้เครื่องพิมพ์มีปัญหา</div>`;},
+
+  collect(){const err=S.printError;
+    return `<div class="scr-body">
+      <div class="h2">${err?'รับไฟล์ดิจิทัลของคุณ':'รับรูปของคุณได้เลย'}</div>
+      ${err?`<div class="banner bad"><i class="ti ti-printer-off"></i><div>เครื่องพิมพ์ขัดข้อง แต่ไฟล์ดิจิทัลของคุณพร้อมแล้ว (สแกน QR) · งานพิมพ์เข้าคิว reprint · แจ้งพนักงานแล้ว</div></div>`
+        :`<div class="banner good"><i class="ti ti-check"></i><div>พิมพ์เสร็จเรียบร้อย หยิบงานพิมพ์ที่ช่องด้านล่างได้เลย</div></div>`}
+      <div style="display:flex;gap:1em;align-items:center;flex-wrap:wrap;justify-content:center">
+        ${err?'':photoComposite()}
+        <div class="qrbox">${qrSvg()}<div class="qcap"><i class="ti ti-download"></i> ดาวน์โหลด</div></div>
+      </div>
+      <button class="btn primary lg" data-act="finish"><i class="ti ti-check"></i>เสร็จแล้ว</button>
+    </div><div class="scr-foot">QR ค้างไว้ ~25–30 วิ · กด "เสร็จแล้ว" เพื่อไปต่อ</div>`;},
+
+  thankyou(){return `<div class="scr-body">
+      <div class="hero-ico" style="color:var(--warn)"><i class="ti ti-confetti"></i></div>
+      <div class="h1">ขอบคุณที่ใช้บริการ</div>
+      <div class="sub">แล้วพบกันใหม่ · กำลังกลับสู่หน้าเริ่ม…</div>
+      <button class="btn ghost" data-act="finish2">กลับหน้าเริ่มเลย</button>
+    </div><div class="scr-foot">กลับอัตโนมัติใน ~5 วิ</div>`;}
+};
+
+const AUTO={
+  capture(){
+    if(S.capPhase==='count')after(850,()=>{if(S.count>1){S.count--;render();}else{S.shots[S.shotIndex]=SHOT_COLORS[S.shotIndex%6];S.capPhase='flash';render();}});
+    else if(S.capPhase==='flash')after(280,()=>{S.capPhase='review';render();});
+  },
+  payproc(){after(1300,()=>go(S.payScenario==='success'?'getready':'payfail'));},
+  getready(){after(2200,beginCapture);},
+  printing(){S.progress=0;const iv=setInterval(()=>{S.progress+=6+Math.random()*7;
+    if(S.progress>=100){S.progress=100;clearInterval(iv);S.printError=(S.printScenario==='fail');after(500,()=>go('collect'));}
+    const bar=document.getElementById('pbar');if(bar)bar.style.width=S.progress+'%';},240);timers.push(iv);},
+  thankyou(){after(5000,resetToAttract);}
+};
+
+function beginCapture(){S.shotIndex=0;S.shots=[];S.capPhase='count';S.count=3;go('capture');}
+function resetToAttract(){clearIdle();S.step='attract';S.frame=null;S.qty=1;S.filter='none';S.shots=[];S.shotIndex=0;S.printError=false;S.progress=0;render();}
+
+/* ---- idle timeout ---- */
+function clearIdle(){clearTimeout(idleT);clearInterval(idleIV);idleT=null;idleIV=null;S.idleActive=false;const o=document.getElementById('idleOv');if(o)o.remove();}
+function armIdle(){clearTimeout(idleT);if(!IDLE_STEPS.has(S.step))return;idleT=setTimeout(triggerIdle,IDLE_MS);}
+function triggerIdle(){
+  if(S.idleActive)return;S.idleActive=true;idleCount=10;
+  const o=document.createElement('div');o.id='idleOv';o.className='idleov';
+  o.innerHTML=`<div class="idlecard">
+    <div class="idlering"><span id="idleNum">${idleCount}</span></div>
+    <div class="h2">ยังอยู่ไหมคะ?</div>
+    <div class="sub">ระบบจะกลับหน้าเริ่มใน <b id="idleNum2">${idleCount}</b> วินาที<br/>แตะปุ่มด้านล่างเพื่อทำต่อ</div>
+    <div class="btn-row"><button class="btn primary lg" data-act="idlestay"><i class="ti ti-hand-finger"></i>ยังอยู่ ทำต่อ</button><button class="btn ghost" data-act="idlereset">เริ่มใหม่</button></div>
+  </div>`;
+  screenEl.appendChild(o);
+  idleIV=setInterval(()=>{idleCount--;const a=document.getElementById('idleNum'),b=document.getElementById('idleNum2');
+    if(a)a.textContent=idleCount;if(b)b.textContent=idleCount;
+    if(idleCount<=0){clearIdle();resetToAttract();}},1000);
+}
+
+function renderStepper(){let idx=JOURNEY.indexOf(S.step);
+  if(S.step==='payproc'||S.step==='payfail')idx=JOURNEY.indexOf('pay');
+  let h='';JOURNEY.forEach((s,i)=>{h+=`<div class="d ${i===idx?'on':(i<idx?'done':'')}"></div>`;});stepperEl.innerHTML=h;}
+
+function render(){
+  clearTimers();clearIdle();
+  device.className='device '+S.orientation;
+  sizeDevice();
+  screenEl.innerHTML=topBar()+STEP[S.step]();
+  renderStepper();
+  if(AUTO[S.step])AUTO[S.step]();
+  armIdle();
+}
+
+screenEl.addEventListener('click',e=>{
+  const el=e.target.closest('[data-act]');if(!el)return;
+  const act=el.getAttribute('data-act'),id=el.getAttribute('data-id');
+  switch(act){
+    case 'start':go('frame');break;
+    case 'selframe':S.frame=JSON.parse(JSON.stringify(FRAMES[S.orientation].find(f=>f.id===id)));go('quantity');break;
+    case 'qtyminus':S.qty=Math.max(1,S.qty-1);render();break;
+    case 'qtyplus':S.qty=Math.min(4,S.qty+1);render();break;
+    case 'qtynext':go(S.mode==='paid'?'pay':'getready');break;
+    case 'pay':go('payproc');break;
+    case 'paycancel':resetToAttract();break;
+    case 'payretry':go('pay');break;
+    case 'ready':beginCapture();break;
+    case 'retake':S.capPhase='count';S.count=3;render();break;
+    case 'nextshot':if(S.shotIndex+1<S.frame.shots){S.shotIndex++;S.capPhase='count';S.count=3;render();}else go('preview');break;
+    case 'filter':S.filter=id;render();break;
+    case 'confirm':go('confirm');break;
+    case 'confirmback':go('preview');break;
+    case 'print':go('printing');break;
+    case 'finish':go('thankyou');break;
+    case 'finish2':resetToAttract();break;
+    case 'idlestay':clearIdle();armIdle();break;
+    case 'idlereset':clearIdle();resetToAttract();break;
+  }
+});
+/* reset idle on any touch when not in overlay */
+screenEl.addEventListener('pointerdown',()=>{if(!S.idleActive)armIdle();});
+
+function bindSeg(segId,attr,key,cb){document.getElementById(segId).addEventListener('click',e=>{
+  const b=e.target.closest('button');if(!b)return;S[key]=b.getAttribute(attr);
+  [...b.parentNode.children].forEach(c=>c.classList.remove('on'));b.classList.add('on');if(cb)cb();});}
+bindSeg('segOri','data-ori','orientation',()=>{if(['quantity','preview','confirm'].includes(S.step)){S.step='frame';S.frame=null;}render();});
+bindSeg('segMode','data-mode','mode',()=>{if(['pay','payproc','payfail'].includes(S.step))resetToAttract();else render();});
+bindSeg('segPay','data-pay','payScenario');
+bindSeg('segPrint','data-print','printScenario');
+document.getElementById('btnRestart').addEventListener('click',resetToAttract);
+document.getElementById('btnIdle').addEventListener('click',()=>{if(!IDLE_STEPS.has(S.step)){S.step='frame';S.frame=null;render();}setTimeout(triggerIdle,60);});
+window.addEventListener('resize',sizeDevice);
+
+render();
+</script>
+</body>
+</html>
