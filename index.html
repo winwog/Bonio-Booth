@@ -56,6 +56,22 @@
   .hero{line-height:1;}
   .hero .big{font-size:4em;filter:drop-shadow(0 10px 22px rgba(179,157,255,.4));}
 
+  .landing{height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1.1em;cursor:pointer;padding:1em;}
+  .aper{position:relative;width:7.2em;height:7.2em;display:grid;place-items:center;}
+  .aper .ring{position:absolute;width:100%;height:100%;border-radius:50%;border:2px solid var(--accent);opacity:0;animation:ringpulse 2.8s ease-out infinite;}
+  .aper .ring.r2{animation-delay:1.4s;}
+  .aperblades{width:100%;height:100%;animation:breathe 4.5s ease-in-out infinite;}
+  .aperblades .dash{transform-origin:60px 60px;animation:spinslow 12s linear infinite;}
+  .wordmark{font-family:"Kanit",sans-serif;font-weight:700;font-size:3.1em;letter-spacing:.08em;line-height:1;
+    background:linear-gradient(90deg,#b39dff,#ff5c9a,#5eead4,#b39dff);background-size:220% auto;-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;color:transparent;animation:sheen 6s linear infinite;}
+  .tagline{font-family:"Kanit",sans-serif;font-weight:500;font-size:.78em;letter-spacing:.55em;color:var(--ink-faint);padding-left:.55em;}
+  .taphint{font-family:"Kanit",sans-serif;font-size:1.05em;color:var(--ink-dim);display:flex;align-items:center;gap:.4em;animation:pulsehint 1.8s ease-in-out infinite;margin-top:.4em;}
+  @keyframes spinslow{to{transform:rotate(360deg);}}
+  @keyframes breathe{0%,100%{transform:scale(1);}50%{transform:scale(1.05);}}
+  @keyframes sheen{to{background-position:220% center;}}
+  @keyframes pulsehint{0%,100%{opacity:.45;transform:translateY(0);}50%{opacity:1;transform:translateY(-4px);}}
+  @keyframes ringpulse{0%{transform:scale(.85);opacity:.7;}70%{transform:scale(1.3);opacity:0;}100%{opacity:0;}}
+
   .btn{font-family:"Kanit",sans-serif;cursor:pointer;border:1px solid var(--stroke);background:var(--glass-2);color:var(--ink);
     padding:.72em 1.7em;border-radius:999px;font-size:1.08em;font-weight:500;transition:transform .12s,background .2s,box-shadow .2s;
     backdrop-filter:blur(8px);display:inline-flex;align-items:center;gap:.5em;justify-content:center;min-height:2.8em;}
@@ -259,66 +275,69 @@ function miniLayout(f){let c='';for(let i=0;i<f.shots;i++)c+='<i></i>';
   return `<div class="mini" style="grid-template-columns:repeat(${f.cols},1fr);grid-template-rows:repeat(${f.rows},1fr)">${c}</div>`;}
 function photoComposite(){const f=S.frame,fil=FILTERS.find(x=>x.id===S.filter).css;let c='';
   for(let i=0;i<f.shots;i++)c+=`<b style="background:${S.shots[i]||sampleBg(i)};filter:${fil}"></b>`;
-  return `<div class="photo"><span class="sticker st1">💖</span><span class="sticker st2">✨</span>
-    <div class="cells" style="grid-template-columns:repeat(${f.cols},1fr)">${c}</div><div class="cap">bonio ✿ ${new Date().toLocaleDateString('th-TH',{day:'2-digit',month:'2-digit',year:'2-digit'})}</div></div>`;}
+  return `<div class="photo">
+    <div class="cells" style="grid-template-columns:repeat(${f.cols},1fr)">${c}</div><div class="cap">bonio · ${new Date().toLocaleDateString('th-TH',{day:'2-digit',month:'2-digit',year:'2-digit'})}</div></div>`;}
 
 const STEP={
-  attract(){return `<div class="scr-body">
-    <div class="hero"><span class="big">📸</span></div>
-    <div class="h1">มาถ่ายรูปกัน!</div>
-    <div class="sub">เลือกกรอบน่ารัก ๆ ถ่ายเก็บโมเมนต์<br/>แล้วรับรูปได้ทั้งแบบพิมพ์และดิจิทัล</div>
-    <button class="btn primary lg" data-act="start"><i class="ti ti-hand-finger"></i>แตะเริ่มเลย!</button>
-  </div><div class="scr-foot">${S.mode==='free'?'🎁 วันนี้ถ่ายฟรี!':'เริ่มต้น '+PRICE+' บาท'}</div>`;},
+  attract(){return `<div class="landing" data-act="start">
+    <div class="aper"><span class="ring"></span><span class="ring r2"></span>
+      <svg class="aperblades" viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
+        <defs><linearGradient id="ag" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#b39dff"/><stop offset=".5" stop-color="#ff5c9a"/><stop offset="1" stop-color="#5eead4"/></linearGradient></defs>
+        <circle cx="60" cy="60" r="52" fill="none" stroke="rgba(255,255,255,.12)" stroke-width="2"/>
+        <circle class="dash" cx="60" cy="60" r="52" fill="none" stroke="url(#ag)" stroke-width="4" stroke-linecap="round" stroke-dasharray="46 220"/>
+        <polygon class="hex" points="60,26 89,43 89,77 60,94 31,77 31,43" fill="none" stroke="rgba(255,255,255,.35)" stroke-width="2"/>
+        <circle cx="60" cy="60" r="7" fill="#ff5c9a"/>
+      </svg></div>
+    <div class="wordmark">BONIO</div>
+    <div class="tagline">PHOTO BOOTH</div>
+    <div class="taphint"><i class="ti ti-hand-finger"></i> แตะเพื่อเริ่ม</div>
+  </div>`;},
 
   frame(){let cards='';FRAMES[S.orientation].forEach(f=>{cards+=`<div class="fcard" data-act="selframe" data-id="${f.id}">${miniLayout(f)}<div class="fname">${f.name}</div><div class="fshots">${f.shots} ช็อต</div></div>`;});
-    return `<div class="scr-body" style="justify-content:flex-start;padding-top:.5em">
-      <div class="h2">เลือกกรอบที่ชอบ ✿</div>
-      <div class="sub">กรอบจะกำหนดจำนวนช็อตให้เอง</div>
+    return `<div class="scr-body" style="justify-content:flex-start;padding-top:.8em">
+      <div class="h2">เลือกกรอบ</div>
       <div class="frames">${cards}</div>
-    </div><div class="scr-foot"><i class="ti ti-clock"></i> พักหน้าจอถ้าไม่มีการแตะ</div>`;},
+    </div>`;},
 
   quantity(){const total=S.qty*PRICE,f=S.frame;
     return `<div class="scr-body">
-      <div class="h2">พิมพ์กี่ชุดดี?</div>
+      <div class="h2">จำนวนพิมพ์</div>
       ${miniLayout(f)}
-      <div class="sub">${f.name} · ${f.shots} ช็อต</div>
       <div style="display:flex;align-items:center;gap:1.3em">
         <button class="btn" data-act="qtyminus" style="width:2.5em;height:2.5em;padding:0;font-size:1.4em">−</button>
         <div style="font-family:Kanit,sans-serif;font-weight:600;font-size:2.6em;min-width:1.3em;color:var(--accent)">${S.qty}</div>
         <button class="btn" data-act="qtyplus" style="width:2.5em;height:2.5em;padding:0;font-size:1.4em">+</button>
       </div>
-      ${S.mode==='paid'?`<div class="pill price"><i class="ti ti-cash"></i> รวม ${total} บาท</div>`:`<div class="pill free"><i class="ti ti-gift"></i> ฟรี · งาน event</div>`}
+      ${S.mode==='paid'?`<div class="pill price"><i class="ti ti-cash"></i> ${total} บาท</div>`:`<div class="pill free"><i class="ti ti-gift"></i> ฟรี</div>`}
       <button class="btn primary lg" data-act="qtynext">${S.mode==='paid'?'ไปจ่ายเงิน':'ไปถ่ายรูป'} <i class="ti ti-arrow-right"></i></button>
-    </div><div class="scr-foot"><i class="ti ti-clock"></i> idle 45–60 วิ</div>`;},
+    </div>`;},
 
   pay(){const total=S.qty*PRICE;
     return `<div class="scr-body">
-      <div class="h2">สแกนจ่ายเลย 💸</div>
+      <div class="h2">สแกนเพื่อจ่าย</div>
       <div class="qrbox"><div class="qrgen" data-qr="${DL}?pay=${total}"></div><div class="qcap">พร้อมเพย์ · ${total} บาท</div></div>
-      <div class="sub">สแกนด้วยแอปธนาคาร<br/>หรือกดปุ่มด้านล่างเพื่อจำลอง</div>
       <button class="btn primary" data-act="pay"><i class="ti ti-qrcode"></i>จำลองการจ่ายเงิน</button>
       <button class="btn ghost" data-act="paycancel">ยกเลิก</button>
-    </div><div class="scr-foot"><i class="ti ti-clock"></i> 90–120 วิ · หยุดนับเมื่อเริ่มจ่าย</div>`;},
+    </div>`;},
 
   payproc(){return `<div class="scr-body">
       <div class="spinner"></div>
-      <div class="h2">กำลังเช็คยอด…</div>
-      <div class="sub">รอแป๊บนะ</div>
-    </div><div class="scr-foot">อย่าเพิ่งปิดหน้าจอ</div>`;},
+      <div class="h2">กำลังเช็คยอด</div>
+    </div>`;},
 
   payfail(){return `<div class="scr-body">
-      <div class="hero"><span class="big">😅</span></div>
-      <div class="h2">ยังจ่ายไม่สำเร็จ</div>
-      <div class="banner bad"><i class="ti ti-info-circle"></i><div>ยอดยังไม่เข้า อาจถูกยกเลิกหรือหมดเวลา ลองสแกนใหม่ หรือเรียกพนักงานช่วยได้เลย</div></div>
+      <div class="hero"><i class="ti ti-alert-triangle" style="font-size:3em;color:var(--pink)"></i></div>
+      <div class="h2">จ่ายไม่สำเร็จ</div>
+      <div class="banner bad"><i class="ti ti-info-circle"></i><div>ยอดยังไม่เข้า ลองสแกนใหม่ หรือเรียกพนักงานช่วยได้เลย</div></div>
       <div class="btn-row"><button class="btn primary" data-act="payretry"><i class="ti ti-refresh"></i>ลองใหม่</button><button class="btn ghost" data-act="paycancel">ยกเลิก</button></div>
-    </div><div class="scr-foot">ปุ่มยกเลิก = กลับหน้าเริ่ม</div>`;},
+    </div>`;},
 
   getready(){return `<div class="scr-body">
-      <div class="hero"><span class="big">🤳</span></div>
-      <div class="h1">เตรียมโพสท่า!</div>
-      <div class="sub">${useCam?'มองที่กล้อง ยิ้มสวย ๆ':'กำลังเปิดกล้อง…'}<br/>อีกแป๊บจะเริ่มนับถอยหลัง</div>
-      <button class="btn primary lg" data-act="ready"><i class="ti ti-player-play"></i>พร้อมแล้ว!</button>
-    </div><div class="scr-foot">${S.frame.shots} ช็อต · เริ่มอัตโนมัติใน 2 วิ</div>`;},
+      <div class="hero"><i class="ti ti-camera" style="font-size:3em;color:var(--accent)"></i></div>
+      <div class="h1">เตรียมโพสท่า</div>
+      <div class="sub">${useCam?'มองที่กล้อง':'กำลังเปิดกล้อง…'}</div>
+      <button class="btn primary lg" data-act="ready"><i class="ti ti-player-play"></i>พร้อมแล้ว</button>
+    </div>`;},
 
   capture(){const f=S.frame;let thumbs='';
     for(let i=0;i<f.shots;i++)thumbs+=`<div class="sthumb ${S.shots[i]?'':'empty'}" style="${S.shots[i]?'background:'+S.shots[i]:''}"></div>`;
@@ -327,56 +346,53 @@ const STEP={
     if(S.capPhase==='count')mid=`<div class="cam"><div class="camfill" id="camlive" style="${previewBg}"></div><div class="cambadge"><span class="rec"></span>LIVE</div><div class="countbubble"><span>${S.count}</span></div></div>`;
     else if(S.capPhase==='flash')mid=`<div class="cam"><div class="camfill" style="background:${S.shots[S.shotIndex]}"></div><div class="flashwhite"></div></div>`;
     else mid=`<div class="cam"><div class="camfill" style="background:${S.shots[S.shotIndex]}"></div><div class="camcheck"><i class="ti ti-check"></i></div></div>`;
-    return `<div class="scr-body" style="justify-content:flex-start;padding-top:.5em;gap:.7em">
-      <div class="pill"><i class="ti ti-camera"></i> ช็อตที่ ${S.shotIndex+1} / ${f.shots}</div>
+    return `<div class="scr-body" style="justify-content:flex-start;padding-top:.6em;gap:.7em">
+      <div class="pill"><i class="ti ti-camera"></i> ${S.shotIndex+1} / ${f.shots}</div>
       ${mid}
       <div class="shotthumbs">${thumbs}</div>
       ${S.capPhase==='review'?`<div class="btn-row"><button class="btn" data-act="retake"><i class="ti ti-refresh"></i>ถ่ายใหม่</button><button class="btn primary" data-act="nextshot">${S.shotIndex+1<f.shots?'ช็อตต่อไป':'ดูตัวอย่าง'} <i class="ti ti-arrow-right"></i></button></div>`
-        :`<div class="sub" style="min-height:1.4em">${S.capPhase==='count'?'ยิ้มไว้ 😄':''}</div>`}
-    </div><div class="scr-foot">${S.capPhase==='review'?'ถ่ายใหม่ได้เฉพาะช่วงนี้':'ถ่ายอัตโนมัติเมื่อนับถึง 0'}</div>`;},
+        :`<div class="sub" style="min-height:1.4em">${S.capPhase==='count'?'ยิ้มไว้':''}</div>`}
+    </div>`;},
 
   preview(){let chips='';FILTERS.forEach(fl=>{chips+=`<div class="fchip ${S.filter===fl.id?'on':''}" data-act="filter" data-id="${fl.id}">${fl.name}</div>`;});
     return `<div class="scr-body">
-      <div class="h2">สวยปัง! ✨</div>
+      <div class="h2">ตัวอย่าง</div>
       ${photoComposite()}
       <div class="filters">${chips}</div>
       <button class="btn primary lg" data-act="confirm">ใช้รูปนี้ <i class="ti ti-arrow-right"></i></button>
-    </div><div class="scr-foot"><i class="ti ti-info-circle"></i> เลือกฟิลเตอร์แล้วไปต่อได้เลย</div>`;},
+    </div>`;},
 
   confirm(){const total=S.qty*PRICE;
     return `<div class="scr-body">
       <div class="h2">ยืนยันสั่งพิมพ์</div>
       ${photoComposite()}
       <div class="sub">${S.frame.name} · ${S.qty} ชุด${S.mode==='paid'?' · '+total+' บาท':''}</div>
-      <div class="btn-row"><button class="btn ghost" data-act="confirmback">ย้อนกลับ</button><button class="btn primary" data-act="print"><i class="ti ti-printer"></i>พิมพ์เลย!</button></div>
-    </div><div class="scr-foot">DNP DS-RX1HS</div>`;},
+      <div class="btn-row"><button class="btn ghost" data-act="confirmback">ย้อนกลับ</button><button class="btn primary" data-act="print"><i class="ti ti-printer"></i>พิมพ์เลย</button></div>
+    </div>`;},
 
   printing(){return `<div class="scr-body">
-      <div class="h2">กำลังพิมพ์… 🖨️</div>
+      <div class="h2">กำลังพิมพ์</div>
       <div class="prog"><b id="pbar" style="width:${S.progress}%"></b></div>
-      <div class="sub">อีกไม่กี่วินาที</div>
-      <div class="qrbox"><div class="qrgen" data-qr="${DL}"></div><div class="qcap"><i class="ti ti-download"></i> สแกนโหลดไฟล์ได้เลย</div></div>
-      <div class="sub" style="color:var(--mint);font-weight:500">QR ขึ้นแล้ว — โหลดระหว่างรอได้เลย</div>
-    </div><div class="scr-foot">ได้ไฟล์ดิจิทัลแน่ ๆ แม้เครื่องพิมพ์มีปัญหา</div>`;},
+      <div class="qrbox"><div class="qrgen" data-qr="${DL}"></div><div class="qcap"><i class="ti ti-download"></i> สแกนโหลดได้เลย</div></div>
+    </div>`;},
 
   collect(){const err=S.printError;
     return `<div class="scr-body">
-      <div class="h2">${err?'รับไฟล์ดิจิทัลเลย':'รับรูปได้เลย! 🎉'}</div>
-      ${err?`<div class="banner bad"><i class="ti ti-printer-off"></i><div>เครื่องพิมพ์ขัดข้อง แต่ไฟล์ดิจิทัลพร้อมแล้ว (สแกน QR) · งานพิมพ์เข้าคิว reprint · แจ้งพนักงานแล้ว</div></div>`
-        :`<div class="banner good"><i class="ti ti-check"></i><div>พิมพ์เสร็จแล้ว หยิบรูปที่ช่องด้านล่างได้เลย</div></div>`}
+      <div class="h2">${err?'รับไฟล์ดิจิทัล':'รับรูปได้เลย'}</div>
+      ${err?`<div class="banner bad"><i class="ti ti-printer-off"></i><div>เครื่องพิมพ์ขัดข้อง แต่ไฟล์ดิจิทัลพร้อมแล้ว สแกน QR ได้เลย</div></div>`
+        :`<div class="banner good"><i class="ti ti-check"></i><div>พิมพ์เสร็จแล้ว หยิบรูปด้านล่างได้เลย</div></div>`}
       <div style="display:flex;gap:1em;align-items:center;flex-wrap:wrap;justify-content:center">
         ${err?'':photoComposite()}
         <div class="qrbox"><div class="qrgen" data-qr="${DL}"></div><div class="qcap"><i class="ti ti-download"></i> ดาวน์โหลด</div></div>
       </div>
       <button class="btn primary lg" data-act="finish"><i class="ti ti-check"></i>เสร็จแล้ว</button>
-    </div><div class="scr-foot">QR ค้างไว้ ~25–30 วิ · กดเสร็จแล้วเพื่อไปต่อ</div>`;},
+    </div>`;},
 
   thankyou(){return `<div class="scr-body">
-      <div class="hero"><span class="big">🥳</span></div>
-      <div class="h1">ขอบคุณนะ!</div>
-      <div class="sub">แล้วมาถ่ายกันใหม่<br/>กำลังกลับหน้าเริ่ม…</div>
-      <button class="btn ghost" data-act="finish2">กลับหน้าเริ่มเลย</button>
-    </div><div class="scr-foot">กลับอัตโนมัติใน ~5 วิ</div>`;}
+      <div class="hero"><i class="ti ti-confetti" style="font-size:3em;color:var(--accent)"></i></div>
+      <div class="h1">ขอบคุณ</div>
+      <button class="btn ghost" data-act="finish2">กลับหน้าเริ่ม</button>
+    </div>`;}
 };
 
 const AUTO={
@@ -424,7 +440,7 @@ function render(){
   clearTimers();clearIdle();
   device.className='device '+S.orientation;
   sizeDevice();
-  screenEl.innerHTML=chrome()+STEP[S.step]();
+  screenEl.innerHTML=(S.step==='attract'?'':chrome())+STEP[S.step]();
   attachCamera();attachQR();
   requestAnimationFrame(sizeDevice);
   if(AUTO[S.step])AUTO[S.step]();
