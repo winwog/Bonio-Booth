@@ -37,9 +37,21 @@
   .device::after{content:"";position:absolute;border-radius:50%;background:rgba(255,255,255,.3);box-shadow:0 0 0 3px rgba(0,0,0,.25);}
   .device.portrait::after{width:9px;height:9px;top:9px;left:50%;transform:translateX(-50%);}
   .device.landscape::after{width:9px;height:9px;left:9px;top:50%;transform:translateY(-50%);}
-  .screen{width:100%;height:100%;border-radius:26px;overflow:hidden;position:relative;
-    background:rgba(9,9,24,.5);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border:1px solid var(--stroke-soft);
-    display:flex;flex-direction:column;font-size:16px;}
+  .screen{width:100%;height:100%;border-radius:26px;overflow:hidden;position:relative;background:#0a0a1e;border:1px solid var(--stroke-soft);font-size:16px;}
+  .liquid{position:absolute;inset:0;z-index:0;overflow:hidden;background:#0a0a1e;animation:hue 15s linear infinite;}
+  .liquid .b{position:absolute;width:72%;height:72%;border-radius:50%;filter:blur(46px);mix-blend-mode:screen;opacity:.9;}
+  .liquid .b1{background:#2b5bff;top:-16%;left:-12%;animation:mA 17s ease-in-out infinite;}
+  .liquid .b2{background:#00d0ff;top:14%;right:-22%;animation:mB 21s ease-in-out infinite;}
+  .liquid .b3{background:#7a2bff;bottom:-22%;left:2%;animation:mC 19s ease-in-out infinite;}
+  .liquid .b4{background:#ff2d95;bottom:-14%;right:-8%;animation:mD 23s ease-in-out infinite;}
+  .liquid .b5{background:#00ffc3;top:26%;left:22%;width:56%;height:56%;animation:mE 15s ease-in-out infinite;}
+  .scr{position:absolute;inset:0;z-index:1;display:flex;flex-direction:column;background:linear-gradient(180deg,rgba(8,8,22,.28),rgba(8,8,22,.44));}
+  @keyframes hue{to{filter:hue-rotate(360deg);}}
+  @keyframes mA{0%,100%{transform:translate(0,0) scale(1);}50%{transform:translate(26%,22%) scale(1.22);}}
+  @keyframes mB{0%,100%{transform:translate(0,0) scale(1.1);}50%{transform:translate(-24%,18%) scale(.85);}}
+  @keyframes mC{0%,100%{transform:translate(0,0) scale(1);}50%{transform:translate(20%,-20%) scale(1.28);}}
+  @keyframes mD{0%,100%{transform:translate(0,0) scale(1.05);}50%{transform:translate(-18%,-16%) scale(.9);}}
+  @keyframes mE{0%,100%{transform:translate(0,0) scale(1);}50%{transform:translate(-22%,24%) scale(1.2);}}
 
   .scr-prog{height:4px;background:rgba(255,255,255,.08);flex:0 0 auto;}
   .scr-prog b{display:block;height:100%;background:linear-gradient(90deg,var(--accent),#56c8e0);transition:width .4s;border-radius:0 4px 4px 0;box-shadow:0 0 10px rgba(122,168,255,.55);}
@@ -63,8 +75,8 @@
   .aper .ring.r2{animation-delay:2s;}
   .aperblades{width:100%;height:100%;animation:breathe 6s ease-in-out infinite;}
   .aperblades .dash{transform-origin:60px 60px;animation:spinslow 22s linear infinite;}
-  .touch{font-family:"Kanit",sans-serif;font-weight:600;font-size:1.7em;color:var(--ink);letter-spacing:.02em;animation:softpulse 3.2s ease-in-out infinite;}
-  .touch-en{font-family:"Kanit",sans-serif;font-weight:500;font-size:.72em;letter-spacing:.42em;color:var(--ink-faint);padding-left:.42em;margin-top:-.25em;}
+  .touch{font-family:"Kanit",sans-serif;font-weight:700;font-size:2.1em;color:#fff;letter-spacing:.02em;text-shadow:0 2px 26px rgba(0,0,0,.6);animation:softpulse 3.4s ease-in-out infinite;}
+  .touch-en{font-family:"Kanit",sans-serif;font-weight:500;font-size:.8em;letter-spacing:.44em;color:rgba(255,255,255,.8);padding-left:.44em;margin-top:.15em;text-shadow:0 2px 16px rgba(0,0,0,.5);}
   .brandmark{position:absolute;bottom:1.6em;font-family:"Kanit",sans-serif;font-weight:600;font-size:1em;letter-spacing:.22em;padding-left:.22em;
     background:linear-gradient(90deg,#6f9ae0,#a6c7ff,#6f9ae0);background-size:200% auto;-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;color:transparent;animation:sheenslow 16s linear infinite;opacity:.92;}
   @keyframes spinslow{to{transform:rotate(360deg);}}
@@ -175,10 +187,13 @@
 </style>
 </head>
 <body>
-<div class="bg"></div><div class="orb a"></div><div class="orb b"></div><div class="orb c"></div>
-
 <div class="wrap">
-  <div class="device portrait" id="device"><div class="screen" id="screen"></div></div>
+  <div class="device portrait" id="device">
+    <div class="screen" id="screen">
+      <div class="liquid"><span class="b b1"></span><span class="b b2"></span><span class="b b3"></span><span class="b b4"></span><span class="b b5"></span></div>
+      <div class="scr" id="scr"></div>
+    </div>
+  </div>
 </div>
 
 <button class="fab" id="fab" aria-label="ตัวเลือกสำหรับทดสอบ"><i class="ti ti-adjustments-horizontal"></i></button>
@@ -231,6 +246,7 @@ let timers=[],idleT=null,idleIV=null,idleCount=10;
 let stream=null,videoEl=null,useCam=false,camRequested=false;
 const device=document.getElementById('device');
 const screenEl=document.getElementById('screen');
+const contentEl=document.getElementById('scr');
 
 function clearTimers(){timers.forEach(t=>{clearTimeout(t);clearInterval(t);});timers=[];}
 function after(ms,fn){const t=setTimeout(fn,ms);timers.push(t);return t;}
@@ -282,14 +298,6 @@ function photoComposite(){const f=S.frame,fil=FILTERS.find(x=>x.id===S.filter).c
 const STEP={
   attract(){return `<div class="landing" data-act="start">
     <div class="lcenter">
-      <div class="aper"><span class="ring"></span><span class="ring r2"></span>
-        <svg class="aperblades" viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
-          <defs><linearGradient id="ag" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#7aa8ff"/><stop offset=".5" stop-color="#5f8fe0"/><stop offset="1" stop-color="#56c8d8"/></linearGradient></defs>
-          <circle cx="60" cy="60" r="52" fill="none" stroke="rgba(255,255,255,.1)" stroke-width="2"/>
-          <circle class="dash" cx="60" cy="60" r="52" fill="none" stroke="url(#ag)" stroke-width="4" stroke-linecap="round" stroke-dasharray="46 220"/>
-          <polygon class="hex" points="60,26 89,43 89,77 60,94 31,77 31,43" fill="none" stroke="rgba(255,255,255,.28)" stroke-width="2"/>
-          <circle cx="60" cy="60" r="7" fill="#7aa8ff"/>
-        </svg></div>
       <div class="touch">แตะเพื่อเริ่ม</div>
       <div class="touch-en">TOUCH TO START</div>
     </div>
@@ -443,7 +451,7 @@ function render(){
   clearTimers();clearIdle();
   device.className='device '+S.orientation;
   sizeDevice();
-  screenEl.innerHTML=(S.step==='attract'?'':chrome())+STEP[S.step]();
+  contentEl.innerHTML=(S.step==='attract'?'':chrome())+STEP[S.step]();
   attachCamera();attachQR();
   requestAnimationFrame(sizeDevice);
   if(AUTO[S.step])AUTO[S.step]();
