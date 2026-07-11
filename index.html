@@ -59,7 +59,7 @@
   .scr-top{display:flex;align-items:center;justify-content:space-between;padding:.7em 1.2em .2em;font-size:.72em;color:var(--ink-dim);flex:0 0 auto;}
   .scr-top .l{display:flex;align-items:center;gap:.4em;font-weight:600;color:var(--ink);font-family:"Kanit",sans-serif;letter-spacing:.3px;}
   .scr-top .r{display:flex;align-items:center;gap:.5em;}
-  .scr-body{flex:1 1 auto;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.8em;padding:.5em 1.4em .9em;text-align:center;overflow-y:auto;min-height:0;}
+  .scr-body{flex:1 1 auto;display:flex;flex-direction:column;align-items:center;justify-content:center;justify-content:safe center;gap:.8em;padding:.7em 1.4em 1em;text-align:center;overflow-y:auto;min-height:0;}
   .scr-body::-webkit-scrollbar{width:0;height:0;}
   .scr-foot{flex:0 0 auto;padding:.5em 1.2em .85em;color:var(--ink-faint);font-size:.74em;text-align:center;display:flex;align-items:center;justify-content:center;gap:.4em;}
 
@@ -192,6 +192,7 @@
   <div class="device portrait" id="device">
     <div class="screen" id="screen">
       <div class="liquid"><span class="b b1"></span><span class="b b2"></span><span class="b b3"></span><span class="b b4"></span><span class="b b5"></span></div>
+      <div id="camhost" style="position:absolute;width:2px;height:2px;left:0;top:0;overflow:hidden;opacity:0;pointer-events:none;z-index:0"></div>
       <div class="scr" id="scr"></div>
     </div>
   </div>
@@ -243,7 +244,7 @@ const DL='https://bonio.pics/'+CODE;
 
 let S={orientation:'portrait',mode:'paid',payScenario:'success',printScenario:'success',
   step:'attract',frame:null,qty:1,filter:'none',shotIndex:0,shots:[],capPhase:'count',count:3,printError:false,progress:0,idleActive:false};
-let timers=[],idleT=null,idleIV=null,idleCount=10;
+let timers=[],idleT=null,idleIV=null,idleCount=10,camRAF=null;
 let stream=null,videoEl=null,useCam=false,camRequested=false;
 const device=document.getElementById('device');
 const screenEl=document.getElementById('screen');
@@ -262,6 +263,7 @@ async function initCamera(){
     stream=await navigator.mediaDevices.getUserMedia({video:{facingMode:'user',width:{ideal:1280},height:{ideal:960}},audio:false});
     videoEl=document.createElement('video');videoEl.className='camvideo';videoEl.autoplay=true;videoEl.muted=true;videoEl.playsInline=true;
     videoEl.setAttribute('playsinline','');videoEl.setAttribute('muted','');videoEl.srcObject=stream;
+    const host=document.getElementById('camhost');if(host)host.appendChild(videoEl);
     await videoEl.play().catch(()=>{});useCam=true;
   }catch(e){useCam=false;}
 }
@@ -280,7 +282,7 @@ function sizeDevice(){
   if(S.orientation==='portrait'){h=Math.min(availH,960);w=h*0.75;if(w>availW){w=availW;h=w/0.75;}}
   else{w=Math.min(availW,1120);h=w*0.75;if(h>availH){h=availH;w=h/0.75;}}
   device.style.width=Math.round(w)+'px';device.style.height=Math.round(h)+'px';
-  const base=Math.max(13,Math.min(31,Math.round((S.orientation==='portrait'?w:h)/23)));
+  const base=Math.max(13,Math.min(30,Math.round(S.orientation==='portrait'?w/23:h/26)));
   screenEl.style.fontSize=base+'px';
 }
 
@@ -355,7 +357,7 @@ const STEP={
     for(let i=0;i<f.shots;i++)thumbs+=`<div class="sthumb ${S.shots[i]?'':'empty'}" style="${S.shots[i]?'background:'+S.shots[i]:''}"></div>`;
     let mid='';
     const previewBg=useCam?'':('background:'+sampleBg(S.shotIndex));
-    if(S.capPhase==='count')mid=`<div class="cam"><div class="camfill" id="camlive" style="${previewBg}"></div><div class="cambadge"><span class="rec"></span>LIVE</div><div class="countbubble"><span>${S.count}</span></div></div>`;
+    if(S.capPhase==='count')mid='<div class="cam">'+(useCam?'<canvas class="camfill" id="camcanvas"></canvas>':'<div class="camfill" style="'+previewBg+'"></div>')+'<div class="cambadge"><span class="rec"></span>LIVE</div><div class="countbubble"><span>'+S.count+'</span></div></div>';
     else if(S.capPhase==='flash')mid=`<div class="cam"><div class="camfill" style="background:${S.shots[S.shotIndex]}"></div><div class="flashwhite"></div></div>`;
     else mid=`<div class="cam"><div class="camfill" style="background:${S.shots[S.shotIndex]}"></div><div class="camcheck"><i class="ti ti-check"></i></div></div>`;
     return `<div class="scr-body" style="justify-content:flex-start;padding-top:.6em;gap:.7em">
@@ -438,8 +440,22 @@ function triggerIdle(){
     if(a)a.textContent=idleCount;if(b)b.textContent=idleCount;if(idleCount<=0){clearIdle();resetToAttract();}},1000);
 }
 
+function stopCamLoop(){if(camRAF){cancelAnimationFrame(camRAF);camRAF=null;}}
 function attachCamera(){
-  if(S.step==='capture'&&S.capPhase==='count'&&useCam&&videoEl){const w=document.getElementById('camlive');if(w)w.appendChild(videoEl);}
+  stopCamLoop();
+  if(!(S.step==='capture'&&S.capPhase==='count'&&useCam&&videoEl))return;
+  videoEl.play().catch(()=>{});
+  const draw=()=>{
+    if(S.step!=='capture'||S.capPhase!=='count'){camRAF=null;return;}
+    const c=document.getElementById('camcanvas');if(!c){camRAF=null;return;}
+    const w=c.clientWidth||300,h=c.clientHeight||300;
+    if(c.width!==w)c.width=w;if(c.height!==h)c.height=h;
+    const vw=videoEl.videoWidth,vh=videoEl.videoHeight;
+    if(vw&&vh){const s=Math.min(vw/w,vh/h),sw=w*s,sh=h*s,sx=(vw-sw)/2,sy=(vh-sh)/2;
+      const x=c.getContext('2d');x.save();x.translate(w,0);x.scale(-1,1);x.drawImage(videoEl,sx,sy,sw,sh,0,0,w,h);x.restore();}
+    camRAF=requestAnimationFrame(draw);
+  };
+  camRAF=requestAnimationFrame(draw);
 }
 function attachQR(){
   if(typeof QRCode==='undefined')return;
