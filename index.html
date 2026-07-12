@@ -38,13 +38,13 @@
   .device.portrait::after{width:9px;height:9px;top:9px;left:50%;transform:translateX(-50%);}
   .device.landscape::after{width:9px;height:9px;left:9px;top:50%;transform:translateY(-50%);}
   .screen{width:100%;height:100%;border-radius:26px;overflow:hidden;position:relative;background:#0a0a1e;border:1px solid var(--stroke-soft);font-size:16px;}
-  .liquid{position:absolute;inset:0;z-index:0;overflow:hidden;background:#0a0a1e;animation:hue 15s linear infinite;}
+  .liquid{position:absolute;inset:0;z-index:0;overflow:hidden;background:#0a0a1e;animation:hue 9s linear infinite;}
   .liquid .b{position:absolute;width:72%;height:72%;border-radius:50%;filter:blur(46px);mix-blend-mode:screen;opacity:.9;}
-  .liquid .b1{background:#2b5bff;top:-16%;left:-12%;animation:mA 17s ease-in-out infinite;}
-  .liquid .b2{background:#00d0ff;top:14%;right:-22%;animation:mB 21s ease-in-out infinite;}
-  .liquid .b3{background:#7a2bff;bottom:-22%;left:2%;animation:mC 19s ease-in-out infinite;}
-  .liquid .b4{background:#ff2d95;bottom:-14%;right:-8%;animation:mD 23s ease-in-out infinite;}
-  .liquid .b5{background:#00ffc3;top:26%;left:22%;width:56%;height:56%;animation:mE 15s ease-in-out infinite;}
+  .liquid .b1{background:#2b5bff;top:-16%;left:-12%;animation:mA 10s ease-in-out infinite;}
+  .liquid .b2{background:#00d0ff;top:14%;right:-22%;animation:mB 12s ease-in-out infinite;}
+  .liquid .b3{background:#7a2bff;bottom:-22%;left:2%;animation:mC 11s ease-in-out infinite;}
+  .liquid .b4{background:#ff2d95;bottom:-14%;right:-8%;animation:mD 13s ease-in-out infinite;}
+  .liquid .b5{background:#00ffc3;top:26%;left:22%;width:56%;height:56%;animation:mE 9s ease-in-out infinite;}
   .scr{position:absolute;inset:0;z-index:1;display:flex;flex-direction:column;background:linear-gradient(180deg,rgba(6,6,18,.46),rgba(6,6,18,.6));}
   .scr.land{background:linear-gradient(180deg,rgba(6,6,18,.12),rgba(6,6,18,.32));}
   @keyframes hue{to{filter:hue-rotate(360deg);}}
@@ -59,6 +59,8 @@
   .scr-top{display:flex;align-items:center;justify-content:space-between;padding:.7em 1.2em .2em;font-size:.72em;color:var(--ink-dim);flex:0 0 auto;}
   .scr-top .l{display:flex;align-items:center;gap:.4em;font-weight:600;color:var(--ink);font-family:"Kanit",sans-serif;letter-spacing:.3px;}
   .scr-top .r{display:flex;align-items:center;gap:.5em;}
+  .backbtn{font-family:inherit;cursor:pointer;border:1px solid var(--stroke);background:rgba(255,255,255,.14);color:var(--ink);width:1.9em;height:1.9em;border-radius:50%;display:inline-grid;place-items:center;font-size:1.4em;margin-right:.15em;}
+  .backbtn:active{transform:scale(.94);}
   .scr-body{flex:1 1 auto;display:flex;flex-direction:column;align-items:center;justify-content:center;justify-content:safe center;gap:.8em;padding:.7em 1.4em 1em;text-align:center;overflow-y:auto;min-height:0;}
   .scr-body::-webkit-scrollbar{width:0;height:0;}
   .scr-foot{flex:0 0 auto;padding:.5em 1.2em .85em;color:var(--ink-faint);font-size:.74em;text-align:center;display:flex;align-items:center;justify-content:center;gap:.4em;}
@@ -110,8 +112,6 @@
   .fcard:hover{transform:translateY(-4px);background:var(--glass-2);border-color:var(--stroke);}
   .fcard:active{transform:translateY(0);}
   .mini{background:rgba(255,255,255,.92);border-radius:.45em;padding:.32em;display:grid;gap:.2em;box-shadow:0 6px 16px rgba(0,0,0,.3);}
-  .device.portrait .mini{width:3.5em;height:4.6em;}
-  .device.landscape .mini{width:4.4em;height:2.95em;}
   .mini i{background:linear-gradient(135deg,var(--accent),#56c8e0);border-radius:.18em;}
   .fname{font-family:"Kanit",sans-serif;font-size:1em;font-weight:500;}
   .fshots{font-size:.76em;color:var(--ink-faint);}
@@ -214,20 +214,12 @@
 </div>
 
 <script>
-const FRAMES={
-  portrait:[
-    {id:'ps4',name:'สตริป 4 ช่อง',shots:4,cols:1,rows:4},
-    {id:'pg4',name:'ตาราง 2×2',shots:4,cols:2,rows:2},
-    {id:'pd2',name:'คู่ 2 ช่อง',shots:2,cols:1,rows:2},
-    {id:'p1',name:'ภาพเดี่ยว',shots:1,cols:1,rows:1}
-  ],
-  landscape:[
-    {id:'lt3',name:'3 ช่องแนวนอน',shots:3,cols:3,rows:1},
-    {id:'lg4',name:'ตาราง 2×2',shots:4,cols:2,rows:2},
-    {id:'ld2',name:'คู่ 2 ช่อง',shots:2,cols:2,rows:1},
-    {id:'l1',name:'ภาพเดี่ยว',shots:1,cols:1,rows:1}
-  ]
-};
+const FRAMES=[
+  {id:'strip3',name:'สตริป 3 ช่อง',shots:3,cols:3,rows:1},
+  {id:'grid4',name:'ตาราง 2×2',shots:4,cols:2,rows:2},
+  {id:'duo',name:'คู่ 2 ช่อง',shots:2,cols:2,rows:1},
+  {id:'single',name:'ภาพเดี่ยว',shots:1,cols:1,rows:1}
+];
 const FILTERS=[
   {id:'none',name:'ต้นฉบับ',css:'none'},
   {id:'bw',name:'ขาวดำ',css:'grayscale(1) contrast(1.05)'},
@@ -237,6 +229,7 @@ const FILTERS=[
 const SAMPLE=['https://i.pravatar.cc/500?img=13','https://i.pravatar.cc/500?img=32','https://i.pravatar.cc/500?img=45','https://i.pravatar.cc/500?img=25','https://i.pravatar.cc/500?img=16','https://i.pravatar.cc/500?img=9'];
 const PRICE=120;
 const JOURNEY=['attract','frame','quantity','pay','getready','capture','preview','confirm','printing','collect','thankyou'];
+const BACK={frame:'attract',quantity:'frame',pay:'quantity'};
 const IDLE_STEPS=new Set(['frame','quantity','pay','preview','confirm']);
 const IDLE_MS=15000;
 const CODE=Math.random().toString(36).slice(2,8).toUpperCase();
@@ -254,7 +247,7 @@ function clearTimers(){timers.forEach(t=>{clearTimeout(t);clearInterval(t);});ti
 function after(ms,fn){const t=setTimeout(fn,ms);timers.push(t);return t;}
 function go(step){S.step=step;render();}
 function clock(){const d=new Date();return d.getHours().toString().padStart(2,'0')+':'+d.getMinutes().toString().padStart(2,'0');}
-function sampleBg(i){return 'center/cover url("'+SAMPLE[i%SAMPLE.length]+'")';}
+function sampleBg(i){return "center/cover url('"+SAMPLE[i%SAMPLE.length]+"')";}
 
 async function initCamera(){
   if(camRequested)return;camRequested=true;
@@ -271,7 +264,7 @@ function captureFrame(){
   try{const v=videoEl,cw=v.videoWidth||640,ch=v.videoHeight||480,s=Math.min(cw,ch);
     const cv=document.createElement('canvas');cv.width=cv.height=640;const x=cv.getContext('2d');
     x.translate(640,0);x.scale(-1,1);x.drawImage(v,(cw-s)/2,(ch-s)/2,s,s,0,0,640,640);
-    return 'center/cover url("'+cv.toDataURL('image/jpeg',0.85)+'")';
+    return "center/cover url('"+cv.toDataURL('image/jpeg',0.85)+"')";
   }catch(e){return sampleBg(S.shotIndex);}
 }
 
@@ -288,11 +281,13 @@ function sizeDevice(){
 
 function chrome(){let idx=JOURNEY.indexOf(S.step);if(S.step==='payproc'||S.step==='payfail')idx=JOURNEY.indexOf('pay');
   const pct=Math.max(0,Math.round(idx/(JOURNEY.length-1)*100));
+  const back=BACK[S.step]?`<button class="backbtn" data-act="back" aria-label="ย้อนกลับ"><i class="ti ti-chevron-left"></i></button>`:'';
   return `<div class="scr-prog"><b style="width:${pct}%"></b></div>
-  <div class="scr-top"><div class="l"><i class="ti ti-aperture"></i>bonio</div>
+  <div class="scr-top"><div class="l">${back}<i class="ti ti-aperture"></i>bonio</div>
   <div class="r"><i class="ti ti-wifi"></i><i class="ti ti-battery-3"></i><span>${clock()}</span></div></div>`;}
 function miniLayout(f){let c='';for(let i=0;i<f.shots;i++)c+='<i></i>';
-  return `<div class="mini" style="grid-template-columns:repeat(${f.cols},1fr);grid-template-rows:repeat(${f.rows},1fr)">${c}</div>`;}
+  const u=1.2,w=(f.cols*u+0.5).toFixed(2),h=(f.rows*u+0.5).toFixed(2);
+  return `<div class="mini" style="width:${w}em;height:${h}em;grid-template-columns:repeat(${f.cols},1fr);grid-template-rows:repeat(${f.rows},1fr)">${c}</div>`;}
 function photoComposite(){const f=S.frame,fil=FILTERS.find(x=>x.id===S.filter).css;let c='';
   for(let i=0;i<f.shots;i++)c+=`<b style="background:${S.shots[i]||sampleBg(i)};filter:${fil}"></b>`;
   return `<div class="photo">
@@ -307,7 +302,7 @@ const STEP={
     <div class="brandmark">BONIO BOOTH</div>
   </div>`;},
 
-  frame(){let cards='';FRAMES[S.orientation].forEach(f=>{cards+=`<div class="fcard" data-act="selframe" data-id="${f.id}">${miniLayout(f)}<div class="fname">${f.name}</div><div class="fshots">${f.shots} ช็อต</div></div>`;});
+  frame(){let cards='';FRAMES.forEach(f=>{cards+=`<div class="fcard" data-act="selframe" data-id="${f.id}">${miniLayout(f)}<div class="fname">${f.name}</div><div class="fshots">${f.shots} ช็อต</div></div>`;});
     return `<div class="scr-body" style="justify-content:flex-start;padding-top:.8em">
       <div class="h2">เลือกกรอบ</div>
       <div class="frames">${cards}</div>
@@ -481,7 +476,8 @@ screenEl.addEventListener('click',e=>{
   const act=el.getAttribute('data-act'),id=el.getAttribute('data-id');
   switch(act){
     case 'start':initCamera();go('frame');break;
-    case 'selframe':S.frame=JSON.parse(JSON.stringify(FRAMES[S.orientation].find(f=>f.id===id)));go('quantity');break;
+    case 'selframe':S.frame=JSON.parse(JSON.stringify(FRAMES.find(f=>f.id===id)));go('quantity');break;
+    case 'back':{const b=BACK[S.step];if(b==='attract')resetToAttract();else if(b){S.step=b;render();}}break;
     case 'qtyminus':S.qty=Math.max(1,S.qty-1);render();break;
     case 'qtyplus':S.qty=Math.min(4,S.qty+1);render();break;
     case 'qtynext':go(S.mode==='paid'?'pay':'getready');break;
@@ -506,7 +502,7 @@ screenEl.addEventListener('pointerdown',()=>{if(!S.idleActive)armIdle();});
 function bindSeg(segId,attr,key,cb){document.getElementById(segId).addEventListener('click',e=>{
   const b=e.target.closest('button');if(!b)return;S[key]=b.getAttribute(attr);
   [...b.parentNode.children].forEach(c=>c.classList.remove('on'));b.classList.add('on');if(cb)cb();});}
-bindSeg('segOri','data-ori','orientation',()=>{if(['quantity','preview','confirm'].includes(S.step)){S.step='frame';S.frame=null;}render();});
+bindSeg('segOri','data-ori','orientation',()=>render());
 bindSeg('segMode','data-mode','mode',()=>{if(['pay','payproc','payfail'].includes(S.step))resetToAttract();else render();});
 bindSeg('segPay','data-pay','payScenario');
 bindSeg('segPrint','data-print','printScenario');
