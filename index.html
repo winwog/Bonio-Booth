@@ -146,6 +146,15 @@
   .filters{display:flex;gap:.5em;flex-wrap:wrap;justify-content:center;}
   .fchip{cursor:pointer;padding:.5em 1.05em;border-radius:999px;font-size:.92em;background:var(--glass);border:1px solid var(--stroke-soft);color:var(--ink-dim);transition:.15s;font-weight:500;}
   .fchip.on{background:#fff;color:#1a1030;border-color:transparent;}
+  .preview-wrap{display:flex;gap:1em;align-items:center;justify-content:center;width:100%;}
+  .preview-photo{flex:0 0 auto;}
+  .filter-list{display:flex;flex-direction:column;gap:.55em;max-height:14em;overflow-y:auto;padding:.1em;}
+  .filter-list::-webkit-scrollbar{width:0;}
+  .filter-thumb{cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:.22em;flex:0 0 auto;}
+  .filter-thumb .fimg{width:3.5em;height:3.5em;border-radius:.7em;background-size:cover;background-position:center;border:2.5px solid transparent;transition:.15s;}
+  .filter-thumb.on .fimg{border-color:var(--accent);box-shadow:0 0 12px rgba(122,168,255,.6);}
+  .filter-thumb .flabel{font-size:.68em;color:var(--ink-dim);}
+  .filter-thumb.on .flabel{color:#fff;font-weight:600;}
 
   .qrbox{background:#fff;border-radius:1.1em;padding:.75em;display:inline-flex;flex-direction:column;align-items:center;gap:.5em;box-shadow:0 14px 30px rgba(0,0,0,.4);}
   .qrgen{line-height:0;border-radius:.4em;overflow:hidden;}
@@ -363,11 +372,14 @@ const STEP={
         :`<div class="sub" style="min-height:1.4em">${S.capPhase==='count'?'ยิ้มไว้':''}</div>`}
     </div>`;},
 
-  preview(){let chips='';FILTERS.forEach(fl=>{chips+=`<div class="fchip ${S.filter===fl.id?'on':''}" data-act="filter" data-id="${fl.id}">${fl.name}</div>`;});
+  preview(){const src=S.shots[0]||sampleBg(0);let list='';
+    FILTERS.forEach(fl=>{list+=`<div class="filter-thumb ${S.filter===fl.id?'on':''}" data-act="filter" data-id="${fl.id}"><div class="fimg" style="background:${src};filter:${fl.css}"></div><div class="flabel">${fl.name}</div></div>`;});
     return `<div class="scr-body">
-      <div class="h2">ตัวอย่าง</div>
-      ${photoComposite()}
-      <div class="filters">${chips}</div>
+      <div class="h2">แต่งรูปของคุณ</div>
+      <div class="preview-wrap">
+        <div class="preview-photo">${photoComposite()}</div>
+        <div class="filter-list">${list}</div>
+      </div>
       <button class="btn primary lg" data-act="confirm">ใช้รูปนี้ <i class="ti ti-arrow-right"></i></button>
     </div>`;},
 
@@ -424,15 +436,19 @@ function clearIdle(){clearTimeout(idleT);clearInterval(idleIV);idleT=null;idleIV
 function armIdle(){clearTimeout(idleT);if(!IDLE_STEPS.has(S.step))return;idleT=setTimeout(triggerIdle,IDLE_MS);}
 function triggerIdle(){
   if(S.idleActive)return;S.idleActive=true;idleCount=10;
+  const toPrint=['preview','confirm'].includes(S.step);
   const o=document.createElement('div');o.id='idleOv';o.className='idleov';
   o.innerHTML=`<div class="idlecard"><div class="idlering"><span id="idleNum">${idleCount}</span></div>
-    <div class="h2">ยังอยู่ไหมคะ?</div>
-    <div class="sub">จะกลับหน้าเริ่มใน <b id="idleNum2">${idleCount}</b> วิ<br/>แตะปุ่มเพื่อทำต่อ</div>
-    <div class="btn-row"><button class="btn primary lg" data-act="idlestay"><i class="ti ti-hand-finger"></i>ยังอยู่ ทำต่อ</button><button class="btn ghost" data-act="idlereset">เริ่มใหม่</button></div>
+    <div class="h2">${toPrint?'กำลังสั่งพิมพ์ให้':'ยังอยู่ไหมคะ?'}</div>
+    <div class="sub">${toPrint?'ไม่มีการใช้งาน · จะพิมพ์รูปให้ใน':'จะกลับหน้าเริ่มใน'} <b id="idleNum2">${idleCount}</b> วิ</div>
+    <div class="btn-row">${toPrint
+      ?'<button class="btn primary lg" data-act="idlestay"><i class="ti ti-arrow-back-up"></i>ขอเลือกต่อ</button><button class="btn ghost" data-act="idleprint">พิมพ์เลย</button>'
+      :'<button class="btn primary lg" data-act="idlestay"><i class="ti ti-hand-finger"></i>ยังอยู่ ทำต่อ</button><button class="btn ghost" data-act="idlereset">เริ่มใหม่</button>'}</div>
   </div>`;
   screenEl.appendChild(o);
   idleIV=setInterval(()=>{idleCount--;const a=document.getElementById('idleNum'),b=document.getElementById('idleNum2');
-    if(a)a.textContent=idleCount;if(b)b.textContent=idleCount;if(idleCount<=0){clearIdle();resetToAttract();}},1000);
+    if(a)a.textContent=idleCount;if(b)b.textContent=idleCount;
+    if(idleCount<=0){clearIdle();if(toPrint)go('printing');else resetToAttract();}},1000);
 }
 
 function attachCamera(){
@@ -483,6 +499,7 @@ screenEl.addEventListener('click',e=>{
     case 'finish2':resetToAttract();break;
     case 'idlestay':clearIdle();armIdle();break;
     case 'idlereset':clearIdle();resetToAttract();break;
+    case 'idleprint':clearIdle();go('printing');break;
   }
 });
 screenEl.addEventListener('pointerdown',()=>{if(!S.idleActive)armIdle();});
