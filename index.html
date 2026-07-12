@@ -111,8 +111,8 @@
     display:flex;flex-direction:column;align-items:center;gap:.55em;transition:transform .14s,border-color .2s,background .2s;}
   .fcard:hover{transform:translateY(-4px);background:var(--glass-2);border-color:var(--stroke);}
   .fcard:active{transform:translateY(0);}
-  .mini{background:rgba(255,255,255,.92);border-radius:.45em;padding:.32em;display:grid;gap:.2em;box-shadow:0 6px 16px rgba(0,0,0,.3);}
-  .mini i{background:linear-gradient(135deg,var(--accent),#56c8e0);border-radius:.18em;}
+  .mini{background:#fff;border-radius:.5em;padding:.34em;display:grid;gap:.26em;box-shadow:0 8px 20px rgba(0,0,0,.42);position:relative;}
+  .mini i{border-radius:.26em;background-size:cover;background-position:center;box-shadow:inset 0 0 0 1px rgba(0,0,0,.1);}
   .fname{font-family:"Kanit",sans-serif;font-size:1em;font-weight:500;}
   .fshots{font-size:.76em;color:var(--ink-faint);}
 
@@ -285,8 +285,8 @@ function chrome(){let idx=JOURNEY.indexOf(S.step);if(S.step==='payproc'||S.step=
   return `<div class="scr-prog"><b style="width:${pct}%"></b></div>
   <div class="scr-top"><div class="l">${back}<i class="ti ti-aperture"></i>bonio</div>
   <div class="r"><i class="ti ti-wifi"></i><i class="ti ti-battery-3"></i><span>${clock()}</span></div></div>`;}
-function miniLayout(f){let c='';for(let i=0;i<f.shots;i++)c+='<i></i>';
-  const u=1.2,w=(f.cols*u+0.5).toFixed(2),h=(f.rows*u+0.5).toFixed(2);
+function miniLayout(f){let c='';for(let i=0;i<f.shots;i++)c+='<i style="background:'+sampleBg(i)+'"></i>';
+  const u=1.35,w=(f.cols*u+0.55).toFixed(2),h=(f.rows*u+0.55).toFixed(2);
   return `<div class="mini" style="width:${w}em;height:${h}em;grid-template-columns:repeat(${f.cols},1fr);grid-template-rows:repeat(${f.rows},1fr)">${c}</div>`;}
 function photoComposite(){const f=S.frame,fil=FILTERS.find(x=>x.id===S.filter).css;let c='';
   for(let i=0;i<f.shots;i++)c+=`<b style="background:${S.shots[i]||sampleBg(i)};filter:${fil}"></b>`;
@@ -352,7 +352,7 @@ const STEP={
     for(let i=0;i<f.shots;i++)thumbs+=`<div class="sthumb ${S.shots[i]?'':'empty'}" style="${S.shots[i]?'background:'+S.shots[i]:''}"></div>`;
     let mid='';
     const previewBg=useCam?'':('background:'+sampleBg(S.shotIndex));
-    if(S.capPhase==='count')mid='<div class="cam">'+(useCam?'<canvas class="camfill" id="camcanvas"></canvas>':'<div class="camfill" style="'+previewBg+'"></div>')+'<div class="cambadge"><span class="rec"></span>LIVE</div><div class="countbubble"><span>'+S.count+'</span></div></div>';
+    if(S.capPhase==='count')mid='<div class="cam">'+(useCam?'<div class="camfill" id="camslot"></div>':'<div class="camfill" style="'+previewBg+'"></div>')+'<div class="cambadge"><span class="rec"></span>LIVE</div><div class="countbubble"><span>'+S.count+'</span></div></div>';
     else if(S.capPhase==='flash')mid=`<div class="cam"><div class="camfill" style="background:${S.shots[S.shotIndex]}"></div><div class="flashwhite"></div></div>`;
     else mid=`<div class="cam"><div class="camfill" style="background:${S.shots[S.shotIndex]}"></div><div class="camcheck"><i class="ti ti-check"></i></div></div>`;
     return `<div class="scr-body" style="justify-content:flex-start;padding-top:.6em;gap:.7em">
@@ -435,22 +435,10 @@ function triggerIdle(){
     if(a)a.textContent=idleCount;if(b)b.textContent=idleCount;if(idleCount<=0){clearIdle();resetToAttract();}},1000);
 }
 
-function stopCamLoop(){if(camRAF){cancelAnimationFrame(camRAF);camRAF=null;}}
 function attachCamera(){
-  stopCamLoop();
   if(!(S.step==='capture'&&S.capPhase==='count'&&useCam&&videoEl))return;
-  videoEl.play().catch(()=>{});
-  const draw=()=>{
-    if(S.step!=='capture'||S.capPhase!=='count'){camRAF=null;return;}
-    const c=document.getElementById('camcanvas');if(!c){camRAF=null;return;}
-    const w=c.clientWidth||300,h=c.clientHeight||300;
-    if(c.width!==w)c.width=w;if(c.height!==h)c.height=h;
-    const vw=videoEl.videoWidth,vh=videoEl.videoHeight;
-    if(vw&&vh){const s=Math.min(vw/w,vh/h),sw=w*s,sh=h*s,sx=(vw-sw)/2,sy=(vh-sh)/2;
-      const x=c.getContext('2d');x.save();x.translate(w,0);x.scale(-1,1);x.drawImage(videoEl,sx,sy,sw,sh,0,0,w,h);x.restore();}
-    camRAF=requestAnimationFrame(draw);
-  };
-  camRAF=requestAnimationFrame(draw);
+  const slot=document.getElementById('camslot');
+  if(slot){slot.appendChild(videoEl);videoEl.play().catch(()=>{});}
 }
 function attachQR(){
   if(typeof QRCode==='undefined')return;
