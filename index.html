@@ -61,13 +61,17 @@
   .scr-top .r{display:flex;align-items:center;gap:.5em;}
   .backbtn{font-family:inherit;cursor:pointer;border:1px solid var(--stroke);background:rgba(255,255,255,.14);color:var(--ink);width:1.9em;height:1.9em;border-radius:50%;display:inline-grid;place-items:center;font-size:1.4em;margin-right:.15em;}
   .backbtn:active{transform:scale(.94);}
-  .scr-body{flex:1 1 auto;display:flex;flex-direction:column;align-items:center;justify-content:center;justify-content:safe center;gap:.8em;padding:.7em 1.4em 1em;text-align:center;overflow-y:auto;min-height:0;}
+  .scr-body{flex:1 1 auto;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.5em;padding:.7em 1.3em .9em;text-align:center;overflow:hidden;min-height:0;}
+  .scr-main{flex:1 1 auto;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.7em;width:100%;min-height:0;overflow-y:auto;text-align:center;}
+  .scr-main::-webkit-scrollbar{width:0;}
+  .scr-cta{flex:0 0 auto;display:flex;gap:.6em;justify-content:center;align-items:center;width:100%;flex-wrap:wrap;padding-top:.2em;}
+  .scr-cta .btn.lg{min-width:11em;}
   .scr-body::-webkit-scrollbar{width:0;height:0;}
   .scr-foot{flex:0 0 auto;padding:.5em 1.2em .85em;color:var(--ink-faint);font-size:.74em;text-align:center;display:flex;align-items:center;justify-content:center;gap:.4em;}
 
-  .h1{font-family:"Kanit",sans-serif;font-weight:600;font-size:2.1em;line-height:1.2;letter-spacing:.2px;text-shadow:0 2px 16px rgba(0,0,0,.6);}
-  .h2{font-family:"Kanit",sans-serif;font-weight:600;font-size:1.55em;line-height:1.22;letter-spacing:.2px;text-shadow:0 2px 16px rgba(0,0,0,.6);}
-  .sub{color:#e9e6ff;font-size:1.02em;line-height:1.55;font-weight:400;text-shadow:0 1px 12px rgba(0,0,0,.55);}
+  .h1{font-family:"Kanit",sans-serif;font-weight:600;font-size:1.75em;line-height:1.2;letter-spacing:.2px;text-shadow:0 2px 16px rgba(0,0,0,.6);}
+  .h2{font-family:"Kanit",sans-serif;font-weight:600;font-size:1.3em;line-height:1.22;letter-spacing:.2px;text-shadow:0 2px 16px rgba(0,0,0,.6);}
+  .sub{color:#e9e6ff;font-size:.92em;line-height:1.5;font-weight:400;text-shadow:0 1px 12px rgba(0,0,0,.55);}
   .hero{line-height:1;}
   .hero .big{font-size:4em;filter:drop-shadow(0 10px 22px rgba(179,157,255,.4));}
 
@@ -89,16 +93,16 @@
   @keyframes ringpulse{0%{transform:scale(.9);opacity:.5;}70%{transform:scale(1.25);opacity:0;}100%{opacity:0;}}
 
   .btn{font-family:"Kanit",sans-serif;cursor:pointer;border:1px solid var(--stroke);background:var(--glass-2);color:var(--ink);
-    padding:.72em 1.7em;border-radius:999px;font-size:1.08em;font-weight:500;transition:transform .12s,background .2s,box-shadow .2s;
-    backdrop-filter:blur(8px);display:inline-flex;align-items:center;gap:.5em;justify-content:center;min-height:2.8em;}
-  .btn i{font-size:1.1em;}
+    padding:0 1.2em;border-radius:999px;font-size:.95em;font-weight:500;transition:transform .12s,background .2s,box-shadow .2s;white-space:nowrap;
+    backdrop-filter:blur(8px);display:inline-flex;align-items:center;gap:.4em;justify-content:center;min-height:2.6em;}
+  .btn i{font-size:1.05em;}
   .btn:hover{background:rgba(255,255,255,.2);}
   .btn:active{transform:scale(.97);}
-  .btn.primary{background:linear-gradient(135deg,#3f74d6,#79b0ff);color:#fff;border-color:transparent;box-shadow:0 10px 30px rgba(60,110,200,.45);}
+  .btn.primary{background:linear-gradient(135deg,#3f74d6,#79b0ff);color:#fff;border-color:transparent;box-shadow:0 8px 22px rgba(60,110,200,.4);}
   .btn.primary:hover{filter:brightness(1.05);}
   .btn.ghost{background:transparent;border-color:var(--stroke-soft);color:var(--ink-dim);}
-  .btn.lg{padding:.9em 2.1em;font-size:1.28em;min-height:3.2em;}
-  .btn-row{display:flex;gap:.7em;flex-wrap:wrap;justify-content:center;}
+  .btn.lg{padding:0 1.5em;font-size:1em;min-height:2.8em;}
+  .btn-row{display:flex;gap:.6em;flex-wrap:nowrap;justify-content:center;}
 
   .pill{display:inline-flex;align-items:center;gap:.4em;padding:.5em 1.05em;border-radius:999px;background:var(--glass);border:1px solid var(--stroke-soft);font-size:.94em;color:var(--ink-dim);font-weight:500;}
   .pill.price{background:rgba(255,207,92,.16);border-color:rgba(255,207,92,.4);color:#ffdf9e;}
@@ -113,10 +117,32 @@
   .fcard:active{transform:translateY(0);}
   .mini{background:#fff;border-radius:.5em;padding:.34em;display:grid;gap:.26em;box-shadow:0 8px 20px rgba(0,0,0,.42);position:relative;}
   .mini i{border-radius:.26em;background-size:cover;background-position:center;box-shadow:inset 0 0 0 1px rgba(0,0,0,.1);}
+  .subcaps{font-family:"Kanit",sans-serif;font-weight:500;font-size:.76em;letter-spacing:.28em;color:var(--ink-faint);margin-top:-.3em;}
+  .frame-strip{display:flex;gap:1.1em;overflow-x:auto;width:100%;padding:.8em .3em .9em;align-items:flex-start;}
+  .frame-strip::-webkit-scrollbar{height:6px;}
+  .frame-strip::-webkit-scrollbar-thumb{background:rgba(255,255,255,.28);border-radius:3px;}
+  .frame-thumb{position:relative;cursor:pointer;flex:0 0 auto;padding:.25em;border-radius:.6em;transition:.15s;}
+  .frame-thumb.on{background:rgba(122,168,255,.14);outline:2px solid var(--accent);}
+  .frame-thumb .fcheck{position:absolute;top:-.35em;left:-.35em;width:1.5em;height:1.5em;border-radius:50%;background:var(--accent);color:#0a0a1e;display:none;place-items:center;font-size:.9em;z-index:3;box-shadow:0 2px 6px rgba(0,0,0,.4);}
+  .frame-thumb.on .fcheck{display:grid;}
+  .frame-hero{display:flex;align-items:center;justify-content:center;padding:.3em 0 .6em;flex:0 0 auto;}
+  .frameart{position:relative;background-size:100% 100%;background-repeat:no-repeat;border-radius:.2em;box-shadow:0 12px 28px rgba(0,0,0,.5);overflow:hidden;}
+  .fa-photo{position:absolute;background-size:cover;background-position:center;}
+  .fgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:.7em;width:100%;padding:.1em;}
+  .device.landscape .fgrid{grid-template-columns:repeat(6,1fr);gap:.55em;}
+  .fgrid-wrap{flex:1 1 auto;display:flex;align-items:center;justify-content:center;width:100%;min-height:0;}
+  .fcard2{background:var(--glass);border:1.5px solid var(--stroke-soft);border-radius:.9em;padding:.7em .4em .55em;display:flex;flex-direction:column;align-items:center;gap:.4em;cursor:pointer;position:relative;transition:transform .12s,border-color .2s,background .2s;}
+  .fcard2:active{transform:scale(.96);}
+  .fcard2.on{border-color:var(--accent);background:rgba(122,168,255,.16);box-shadow:0 0 0 1px var(--accent);}
+  .fcard2-art{display:flex;align-items:center;justify-content:center;}
+  .fcard2 .fname{font-family:"Kanit",sans-serif;font-size:.8em;color:var(--ink-dim);}
+  .fcard2.on .fname{color:#fff;}
+  .fcard2 .fcheck{position:absolute;top:-.4em;right:-.4em;width:1.5em;height:1.5em;border-radius:50%;background:var(--accent);color:#0a0a1e;display:none;place-items:center;font-size:.9em;z-index:3;box-shadow:0 2px 6px rgba(0,0,0,.4);}
+  .fcard2.on .fcheck{display:grid;}
   .fname{font-family:"Kanit",sans-serif;font-size:1em;font-weight:500;}
   .fshots{font-size:.76em;color:var(--ink-faint);}
 
-  .cam{width:100%;flex:1 1 auto;border-radius:1.3em;position:relative;overflow:hidden;min-height:0;background:#160b1f;
+  .cam{width:17em;max-width:100%;aspect-ratio:4/3;flex:0 0 auto;border-radius:1.3em;position:relative;overflow:hidden;background:#160b1f;
     box-shadow:inset 0 0 0 1px var(--stroke-soft),0 14px 34px rgba(0,0,0,.4);}
   .camfill{position:absolute;inset:0;background-color:#160b1f;}
   .camvideo{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transform:scaleX(-1);}
@@ -133,11 +159,9 @@
   .sthumb{width:2.1em;height:2.1em;border-radius:.55em;border:1px solid var(--stroke-soft);background-size:cover;background-position:center;}
   .sthumb.empty{background:rgba(255,255,255,.07);}
 
-  .photo{background:#fff;border-radius:.6em;padding:.5em .5em .9em;box-shadow:0 20px 46px rgba(0,0,0,.5);display:flex;flex-direction:column;gap:.4em;position:relative;transform:rotate(-2deg);}
-  .device.portrait .photo{width:9.2em;}
-  .device.landscape .photo{width:12em;}
-  .photo .cells{display:grid;gap:.35em;}
-  .photo .cells b{border-radius:.32em;aspect-ratio:1/1;display:block;background-size:cover;background-position:center;box-shadow:inset 0 0 0 1px rgba(0,0,0,.06);}
+  .photo{background:#fff;border-radius:.6em;padding:.5em .5em .8em;box-shadow:0 16px 40px rgba(0,0,0,.5);display:inline-flex;flex-direction:column;gap:.4em;position:relative;transform:rotate(-2deg);}
+  .photo .cells{display:grid;gap:.32em;}
+  .photo .cells b{border-radius:.3em;display:block;background-size:cover;background-position:center;box-shadow:inset 0 0 0 1px rgba(0,0,0,.06);}
   .photo .cap{font-family:"Kanit",sans-serif;font-weight:600;font-size:.78em;color:#8b5cf6;text-align:center;letter-spacing:.04em;}
   .photo .sticker{position:absolute;font-size:1.5em;filter:drop-shadow(0 3px 5px rgba(0,0,0,.25));}
   .photo .st1{top:-.4em;right:-.3em;transform:rotate(12deg);}
@@ -148,10 +172,10 @@
   .fchip.on{background:#fff;color:#1a1030;border-color:transparent;}
   .preview-wrap{display:flex;gap:1em;align-items:center;justify-content:center;width:100%;}
   .preview-photo{flex:0 0 auto;}
-  .filter-list{display:flex;flex-direction:column;gap:.55em;max-height:14em;overflow-y:auto;padding:.1em;}
+  .filter-list{display:flex;flex-direction:column;gap:.45em;padding:.1em;}
   .filter-list::-webkit-scrollbar{width:0;}
   .filter-thumb{cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:.22em;flex:0 0 auto;}
-  .filter-thumb .fimg{width:3.5em;height:3.5em;border-radius:.7em;background-size:cover;background-position:center;border:2.5px solid transparent;transition:.15s;}
+  .filter-thumb .fimg{width:2.2em;height:2.2em;border-radius:.55em;background-size:cover;background-position:center;border:2px solid transparent;transition:.15s;}
   .filter-thumb.on .fimg{border-color:var(--accent);box-shadow:0 0 12px rgba(122,168,255,.6);}
   .filter-thumb .flabel{font-size:.68em;color:var(--ink-dim);}
   .filter-thumb.on .flabel{color:#fff;font-weight:600;}
@@ -218,17 +242,22 @@
     <div class="seg good" id="segPay"><button data-pay="success" class="on">สำเร็จ</button><button data-pay="fail">ไม่สำเร็จ</button></div></div>
   <div class="row"><label>ผลการพิมพ์</label>
     <div class="seg good" id="segPrint"><button data-print="success" class="on">สำเร็จ</button><button data-print="fail">ขัดข้อง</button></div></div>
+  <div class="row"><label>Idle timeout</label>
+    <div class="seg" id="segIdle"><button data-idle="on" class="on">เปิด</button><button data-idle="off">ปิด</button></div></div>
   <button class="restart" id="btnIdle"><i class="ti ti-clock-pause"></i> จำลอง idle timeout</button>
   <button class="restart" id="btnRestart"><i class="ti ti-refresh"></i> เริ่มใหม่</button>
 </div>
 
 <script>
 const FRAMES=[
-  {id:'strip3',name:'สตริป 3 ช่อง',shots:3,cols:3,rows:1},
-  {id:'grid4',name:'ตาราง 2×2',shots:4,cols:2,rows:2},
-  {id:'duo',name:'คู่ 2 ช่อง',shots:2,cols:2,rows:1},
-  {id:'single',name:'ภาพเดี่ยว',shots:1,cols:1,rows:1}
+  {id:'s2',name:'2 ช่อง',file:'Frames/Slot-1.2x6 (3 images)-1.svg',W:600,H:1800,slots:[[40,40,520,640],[40,720,520,640]]},
+  {id:'s3',name:'3 ช่อง',file:'Frames/Slot-2.2x6 (3 images).svg',W:600,H:1800,slots:[[40,40,520,413.333],[40,493.333,520,413.333],[40,946.667,520,413.333]]},
+  {id:'s4',name:'4 ช่อง',file:'Frames/Slot-3.2x6 (4 images).svg',W:600,H:1800,slots:[[40,40,520,300],[40,380,520,300],[40,720,520,300],[40,1060,520,300]]},
+  {id:'single',name:'ภาพเดี่ยว',file:'Frames/Slot-4.4x6 (1 images).svg',W:1200,H:1800,slots:[[40,40,1120,1232]]},
+  {id:'d2',name:'คู่แนวนอน',file:'Frames/Slot-5.4x6 (2 images).svg',W:1200,H:1800,slots:[[40,40,1120,596],[40,676,1120,596]]},
+  {id:'g6',name:'ตาราง 2×3',file:'Frames/Slot-6.4x6 (6 images).svg',W:1200,H:1800,slots:[[40,40,540,384],[620,40,540,384],[40,464,540,384],[620,464,540,384],[40,888,540,384],[620,888,540,384]]}
 ];
+FRAMES.forEach(f=>f.shots=f.slots.length);
 const FILTERS=[
   {id:'none',name:'ต้นฉบับ',css:'none'},
   {id:'bw',name:'ขาวดำ',css:'grayscale(1) contrast(1.05)'},
@@ -237,7 +266,7 @@ const FILTERS=[
 ];
 const SAMPLE=['https://i.pravatar.cc/500?img=13','https://i.pravatar.cc/500?img=32','https://i.pravatar.cc/500?img=45','https://i.pravatar.cc/500?img=25','https://i.pravatar.cc/500?img=16','https://i.pravatar.cc/500?img=9'];
 const PRICE=120;
-const JOURNEY=['attract','frame','quantity','pay','getready','capture','preview','confirm','printing','collect','thankyou'];
+const JOURNEY=['attract','frame','quantity','pay','getready','capture','preview','confirm','printing','collect'];
 const BACK={frame:'attract',quantity:'frame',pay:'quantity'};
 const IDLE_STEPS=new Set(['frame','quantity','pay','preview','confirm']);
 const IDLE_MS=15000;
@@ -245,7 +274,7 @@ const CODE=Math.random().toString(36).slice(2,8).toUpperCase();
 const DL='https://bonio.pics/'+CODE;
 
 let S={orientation:'portrait',mode:'paid',payScenario:'success',printScenario:'success',
-  step:'attract',frame:null,qty:1,filter:'none',shotIndex:0,shots:[],capPhase:'count',count:3,printError:false,progress:0,idleActive:false};
+  step:'attract',frame:null,qty:1,filter:'none',shotIndex:0,shots:[],capPhase:'count',count:3,printError:false,progress:0,idleActive:false,idleMode:'on'};
 let timers=[],idleT=null,idleIV=null,idleCount=10,camRAF=null;
 let stream=null,videoEl=null,useCam=false,camRequested=false;
 const device=document.getElementById('device');
@@ -284,7 +313,7 @@ function sizeDevice(){
   if(S.orientation==='portrait'){h=Math.min(availH,960);w=h*0.75;if(w>availW){w=availW;h=w/0.75;}}
   else{w=Math.min(availW,1120);h=w*0.75;if(h>availH){h=availH;w=h/0.75;}}
   device.style.width=Math.round(w)+'px';device.style.height=Math.round(h)+'px';
-  const base=Math.max(13,Math.min(30,Math.round(S.orientation==='portrait'?w/23:h/26)));
+  const base=Math.max(12,Math.min(22,Math.round(S.orientation==='portrait'?w/27:h/30)));
   screenEl.style.fontSize=base+'px';
 }
 
@@ -297,10 +326,14 @@ function chrome(){let idx=JOURNEY.indexOf(S.step);if(S.step==='payproc'||S.step=
 function miniLayout(f){let c='';for(let i=0;i<f.shots;i++)c+='<i style="background:'+sampleBg(i)+'"></i>';
   const u=1.35,w=(f.cols*u+0.55).toFixed(2),h=(f.rows*u+0.55).toFixed(2);
   return `<div class="mini" style="width:${w}em;height:${h}em;grid-template-columns:repeat(${f.cols},1fr);grid-template-rows:repeat(${f.rows},1fr)">${c}</div>`;}
-function photoComposite(){const f=S.frame,fil=FILTERS.find(x=>x.id===S.filter).css;let c='';
-  for(let i=0;i<f.shots;i++)c+=`<b style="background:${S.shots[i]||sampleBg(i)};filter:${fil}"></b>`;
-  return `<div class="photo">
-    <div class="cells" style="grid-template-columns:repeat(${f.cols},1fr)">${c}</div><div class="cap">bonio · ${new Date().toLocaleDateString('th-TH',{day:'2-digit',month:'2-digit',year:'2-digit'})}</div></div>`;}
+function frameArt(f,h){const fil=FILTERS.find(x=>x.id===S.filter).css;const w=(h*f.W/f.H).toFixed(2);
+  let ph='';for(let i=0;i<f.slots.length;i++){const s=f.slots[i];
+    ph+='<div class="fa-photo" style="left:'+(s[0]/f.W*100).toFixed(3)+'%;top:'+(s[1]/f.H*100).toFixed(3)+'%;width:'+(s[2]/f.W*100).toFixed(3)+'%;height:'+(s[3]/f.H*100).toFixed(3)+'%;background:'+(S.shots[i]||sampleBg(i))+';filter:'+fil+'"></div>';}
+  return '<div class="frameart" style="width:'+w+'em;height:'+h+'em;background-image:url(\''+encodeURI(f.file)+'\')">'+ph+'</div>';}
+function photoComposite(cellOverride){const f=S.frame,fil=FILTERS.find(x=>x.id===S.filter).css;
+  const cell=cellOverride||(f.rows>=4?2.4:(f.rows===3?2.9:3.3));let c='';
+  for(let i=0;i<f.shots;i++)c+='<b style="background:'+(S.shots[i]||sampleBg(i))+';filter:'+fil+';width:'+cell+'em;height:'+cell+'em"></b>';
+  return '<div class="photo"><div class="cells" style="grid-template-columns:repeat('+f.cols+','+cell+'em);grid-auto-rows:'+cell+'em">'+c+'</div><div class="cap">bonio · '+new Date().toLocaleDateString('th-TH',{day:'2-digit',month:'2-digit',year:'2-digit'})+'</div></div>';}
 
 const STEP={
   attract(){return `<div class="landing" data-act="start">
@@ -311,50 +344,63 @@ const STEP={
     <div class="brandmark">BONIO BOOTH</div>
   </div>`;},
 
-  frame(){let cards='';FRAMES.forEach(f=>{cards+=`<div class="fcard" data-act="selframe" data-id="${f.id}">${miniLayout(f)}<div class="fname">${f.name}</div><div class="fshots">${f.shots} ช็อต</div></div>`;});
-    return `<div class="scr-body" style="justify-content:flex-start;padding-top:.8em">
-      <div class="h2">เลือกกรอบ</div>
-      <div class="frames">${cards}</div>
+  frame(){if(!S.frame)S.frame=JSON.parse(JSON.stringify(FRAMES[0]));
+    const th=S.orientation==='portrait'?6:5;
+    let cards='';FRAMES.forEach(f=>{const on=S.frame.id===f.id;cards+=`<div class="fcard2 ${on?'on':''}" data-act="selframe" data-id="${f.id}"><div class="fcheck"><i class="ti ti-check"></i></div><div class="fcard2-art">${frameArt(f,th)}</div><div class="fname">${f.name}</div></div>`;});
+    return `<div class="scr-body">
+      <div class="scr-main" style="justify-content:flex-start;gap:.6em;padding-top:.4em">
+        <div class="h2">เลือกกรอบรูป</div>
+        <div class="subcaps">SELECT YOUR FRAME</div>
+        <div class="fgrid-wrap"><div class="fgrid">${cards}</div></div>
+      </div>
+      <div class="scr-cta"><button class="btn primary lg" data-act="framenext">ต่อไป</button></div>
     </div>`;},
 
   quantity(){const total=S.qty*PRICE,f=S.frame;
     return `<div class="scr-body">
-      <div class="h2">จำนวนพิมพ์</div>
-      ${miniLayout(f)}
-      <div style="display:flex;align-items:center;gap:1.3em">
-        <button class="btn" data-act="qtyminus" style="width:2.5em;height:2.5em;padding:0;font-size:1.4em">−</button>
-        <div style="font-family:Kanit,sans-serif;font-weight:700;font-size:2.6em;min-width:1.3em;color:#fff;text-shadow:0 2px 16px rgba(0,0,0,.6)">${S.qty}</div>
-        <button class="btn" data-act="qtyplus" style="width:2.5em;height:2.5em;padding:0;font-size:1.4em">+</button>
+      <div class="scr-main">
+        <div class="h2">จำนวนพิมพ์</div>
+        ${frameArt(f,7)}
+        <div style="display:flex;align-items:center;gap:1.3em">
+          <button class="btn" data-act="qtyminus" style="width:2.5em;height:2.5em;padding:0;font-size:1.4em">−</button>
+          <div style="font-family:Kanit,sans-serif;font-weight:700;font-size:2.1em;min-width:1.3em;color:#fff;text-shadow:0 2px 16px rgba(0,0,0,.6)">${S.qty}</div>
+          <button class="btn" data-act="qtyplus" style="width:2.5em;height:2.5em;padding:0;font-size:1.4em">+</button>
+        </div>
+        ${S.mode==='paid'?`<div class="pill price"><i class="ti ti-cash"></i> ${total} บาท</div>`:`<div class="pill free"><i class="ti ti-gift"></i> ฟรี</div>`}
       </div>
-      ${S.mode==='paid'?`<div class="pill price"><i class="ti ti-cash"></i> ${total} บาท</div>`:`<div class="pill free"><i class="ti ti-gift"></i> ฟรี</div>`}
-      <button class="btn primary lg" data-act="qtynext">${S.mode==='paid'?'ไปจ่ายเงิน':'ไปถ่ายรูป'} <i class="ti ti-arrow-right"></i></button>
+      <div class="scr-cta"><button class="btn primary lg" data-act="qtynext">${S.mode==='paid'?'ไปจ่ายเงิน':'ไปถ่ายรูป'} <i class="ti ti-arrow-right"></i></button></div>
     </div>`;},
 
   pay(){const total=S.qty*PRICE;
     return `<div class="scr-body">
-      <div class="h2">สแกนเพื่อจ่าย</div>
-      <div class="qrbox"><div class="qrgen" data-qr="${DL}?pay=${total}"></div><div class="qcap">พร้อมเพย์ · ${total} บาท</div></div>
-      <button class="btn primary" data-act="pay"><i class="ti ti-qrcode"></i>จำลองการจ่ายเงิน</button>
-      <button class="btn ghost" data-act="paycancel">ยกเลิก</button>
+      <div class="scr-main">
+        <div class="h2">สแกนเพื่อจ่าย</div>
+        <div class="qrbox"><div class="qrgen" data-qr="${DL}?pay=${total}"></div><div class="qcap">พร้อมเพย์ · ${total} บาท</div></div>
+      </div>
+      <div class="scr-cta"><button class="btn ghost" data-act="paycancel">ยกเลิก</button><button class="btn primary lg" data-act="pay"><i class="ti ti-qrcode"></i>จำลองการจ่ายเงิน</button></div>
     </div>`;},
 
-  payproc(){return `<div class="scr-body">
+  payproc(){return `<div class="scr-body"><div class="scr-main">
       <div class="spinner"></div>
       <div class="h2">กำลังเช็คยอด</div>
-    </div>`;},
+    </div></div>`;},
 
   payfail(){return `<div class="scr-body">
-      <div class="hero"><i class="ti ti-alert-triangle" style="font-size:3em;color:var(--pink)"></i></div>
-      <div class="h2">จ่ายไม่สำเร็จ</div>
-      <div class="banner bad"><i class="ti ti-info-circle"></i><div>ยอดยังไม่เข้า ลองสแกนใหม่ หรือเรียกพนักงานช่วยได้เลย</div></div>
-      <div class="btn-row"><button class="btn primary" data-act="payretry"><i class="ti ti-refresh"></i>ลองใหม่</button><button class="btn ghost" data-act="paycancel">ยกเลิก</button></div>
+      <div class="scr-main">
+        <div class="hero"><i class="ti ti-alert-triangle" style="font-size:3em;color:var(--pink)"></i></div>
+        <div class="h2">จ่ายไม่สำเร็จ</div>
+        <div class="banner bad"><i class="ti ti-info-circle"></i><div>ยอดยังไม่เข้า ลองสแกนใหม่ หรือเรียกพนักงานช่วยได้เลย</div></div>
+      </div>
+      <div class="scr-cta"><button class="btn ghost" data-act="paycancel">ยกเลิก</button><button class="btn primary lg" data-act="payretry"><i class="ti ti-refresh"></i>ลองใหม่</button></div>
     </div>`;},
 
   getready(){return `<div class="scr-body">
-      <div class="hero"><i class="ti ti-camera" style="font-size:3em;color:var(--accent)"></i></div>
-      <div class="h1">เตรียมโพสท่า</div>
-      <div class="sub">${useCam?'มองที่กล้อง':'กำลังเปิดกล้อง…'}</div>
-      <button class="btn primary lg" data-act="ready"><i class="ti ti-player-play"></i>พร้อมแล้ว</button>
+      <div class="scr-main">
+        <div class="hero"><i class="ti ti-camera" style="font-size:3em;color:var(--accent)"></i></div>
+        <div class="h1">เตรียมโพสท่า</div>
+        <div class="sub">${useCam?'มองที่กล้อง':'กำลังเปิดกล้อง…'}</div>
+      </div>
+      <div class="scr-cta"><button class="btn primary lg" data-act="ready"><i class="ti ti-player-play"></i>พร้อมแล้ว</button></div>
     </div>`;},
 
   capture(){const f=S.frame;let thumbs='';
@@ -364,55 +410,58 @@ const STEP={
     if(S.capPhase==='count')mid='<div class="cam">'+(useCam?'<div class="camfill" id="camslot"></div>':'<div class="camfill" style="'+previewBg+'"></div>')+'<div class="cambadge"><span class="rec"></span>LIVE</div><div class="countbubble"><span>'+S.count+'</span></div></div>';
     else if(S.capPhase==='flash')mid=`<div class="cam"><div class="camfill" style="background:${S.shots[S.shotIndex]}"></div><div class="flashwhite"></div></div>`;
     else mid=`<div class="cam"><div class="camfill" style="background:${S.shots[S.shotIndex]}"></div><div class="camcheck"><i class="ti ti-check"></i></div></div>`;
-    return `<div class="scr-body" style="justify-content:flex-start;padding-top:.6em;gap:.7em">
-      <div class="pill"><i class="ti ti-camera"></i> ${S.shotIndex+1} / ${f.shots}</div>
-      ${mid}
-      <div class="shotthumbs">${thumbs}</div>
-      ${S.capPhase==='review'?`<div class="btn-row"><button class="btn" data-act="retake"><i class="ti ti-refresh"></i>ถ่ายใหม่</button><button class="btn primary" data-act="nextshot">${S.shotIndex+1<f.shots?'ช็อตต่อไป':'ดูตัวอย่าง'} <i class="ti ti-arrow-right"></i></button></div>`
-        :`<div class="sub" style="min-height:1.4em">${S.capPhase==='count'?'ยิ้มไว้':''}</div>`}
+    const cta=S.capPhase==='review'?'<button class="btn" data-act="retake"><i class="ti ti-refresh"></i>ถ่ายใหม่</button><button class="btn primary lg" data-act="nextshot">'+(S.shotIndex+1<f.shots?'ช็อตต่อไป':'ดูตัวอย่าง')+' <i class="ti ti-arrow-right"></i></button>':'';
+    return `<div class="scr-body">
+      <div class="scr-main" style="gap:.6em">
+        <div class="pill"><i class="ti ti-camera"></i> ${S.shotIndex+1} / ${f.shots}</div>
+        ${mid}
+        <div class="shotthumbs">${thumbs}</div>
+        ${S.capPhase==='count'?`<div class="sub" style="min-height:1.2em">ยิ้มไว้</div>`:''}
+      </div>
+      <div class="scr-cta">${cta}</div>
     </div>`;},
 
   preview(){const src=S.shots[0]||sampleBg(0);let list='';
     FILTERS.forEach(fl=>{list+=`<div class="filter-thumb ${S.filter===fl.id?'on':''}" data-act="filter" data-id="${fl.id}"><div class="fimg" style="background:${src};filter:${fl.css}"></div><div class="flabel">${fl.name}</div></div>`;});
     return `<div class="scr-body">
-      <div class="h2">แต่งรูปของคุณ</div>
-      <div class="preview-wrap">
-        <div class="preview-photo">${photoComposite()}</div>
-        <div class="filter-list">${list}</div>
+      <div class="scr-main">
+        <div class="h2">แต่งรูปของคุณ</div>
+        <div class="preview-wrap">
+          <div class="preview-photo">${frameArt(S.frame,S.orientation==='portrait'?18:12.5)}</div>
+          <div class="filter-list">${list}</div>
+        </div>
       </div>
-      <button class="btn primary lg" data-act="confirm">ใช้รูปนี้ <i class="ti ti-arrow-right"></i></button>
+      <div class="scr-cta"><button class="btn primary lg" data-act="confirm">ใช้รูปนี้ <i class="ti ti-arrow-right"></i></button></div>
     </div>`;},
 
   confirm(){const total=S.qty*PRICE;
     return `<div class="scr-body">
-      <div class="h2">ยืนยันสั่งพิมพ์</div>
-      ${photoComposite()}
-      <div class="sub">${S.frame.name} · ${S.qty} ชุด${S.mode==='paid'?' · '+total+' บาท':''}</div>
-      <div class="btn-row"><button class="btn ghost" data-act="confirmback">ย้อนกลับ</button><button class="btn primary" data-act="print"><i class="ti ti-printer"></i>พิมพ์เลย</button></div>
+      <div class="scr-main">
+        <div class="h2">ยืนยันสั่งพิมพ์</div>
+        ${frameArt(S.frame,S.orientation==='portrait'?13:9.5)}
+        <div class="sub">${S.frame.name} · ${S.qty} ชุด${S.mode==='paid'?' · '+total+' บาท':''}</div>
+      </div>
+      <div class="scr-cta"><button class="btn ghost" data-act="confirmback">ย้อนกลับ</button><button class="btn primary lg" data-act="print"><i class="ti ti-printer"></i>พิมพ์เลย</button></div>
     </div>`;},
 
-  printing(){return `<div class="scr-body">
+  printing(){return `<div class="scr-body"><div class="scr-main">
       <div class="h2">กำลังพิมพ์</div>
       <div class="prog"><b id="pbar" style="width:${S.progress}%"></b></div>
       <div class="qrbox"><div class="qrgen" data-qr="${DL}"></div><div class="qcap"><i class="ti ti-download"></i> สแกนโหลดได้เลย</div></div>
-    </div>`;},
+    </div></div>`;},
 
   collect(){const err=S.printError;
     return `<div class="scr-body">
-      <div class="h2">${err?'รับไฟล์ดิจิทัล':'รับรูปได้เลย'}</div>
-      ${err?`<div class="banner bad"><i class="ti ti-printer-off"></i><div>เครื่องพิมพ์ขัดข้อง แต่ไฟล์ดิจิทัลพร้อมแล้ว สแกน QR ได้เลย</div></div>`
-        :`<div class="banner good"><i class="ti ti-check"></i><div>พิมพ์เสร็จแล้ว หยิบรูปด้านล่างได้เลย</div></div>`}
-      <div style="display:flex;gap:1em;align-items:center;flex-wrap:wrap;justify-content:center">
-        ${err?'':photoComposite()}
-        <div class="qrbox"><div class="qrgen" data-qr="${DL}"></div><div class="qcap"><i class="ti ti-download"></i> ดาวน์โหลด</div></div>
+      <div class="scr-main">
+        <div class="hero"><i class="ti ti-confetti" style="font-size:2.3em;color:var(--accent)"></i></div>
+        <div class="h1">${err?'ไฟล์พร้อมแล้ว ขอบคุณที่ใช้บริการ':'พิมพ์เสร็จแล้ว ขอบคุณที่ใช้บริการ'}</div>
+        <div class="sub">${err?'เครื่องพิมพ์ขัดข้อง แต่สแกน QR เพื่อเก็บไฟล์ได้เลย':'หยิบรูปที่ช่องด้านล่าง แล้วสแกน QR เพื่อเก็บไฟล์'}</div>
+        <div style="display:flex;gap:1.3em;align-items:center;flex-wrap:wrap;justify-content:center">
+          ${err?'':frameArt(S.frame,S.orientation==='portrait'?9.5:7.5)}
+          <div class="qrbox"><div class="qrgen" data-qr="${DL}"></div><div class="qcap"><i class="ti ti-download"></i> ดาวน์โหลด</div></div>
+        </div>
       </div>
-      <button class="btn primary lg" data-act="finish"><i class="ti ti-check"></i>เสร็จแล้ว</button>
-    </div>`;},
-
-  thankyou(){return `<div class="scr-body">
-      <div class="hero"><i class="ti ti-confetti" style="font-size:3em;color:var(--accent)"></i></div>
-      <div class="h1">ขอบคุณ</div>
-      <button class="btn ghost" data-act="finish2">กลับหน้าเริ่ม</button>
+      <div class="scr-cta"><button class="btn primary lg" data-act="finish2"><i class="ti ti-home"></i>กลับหน้าเริ่ม</button></div>
     </div>`;}
 };
 
@@ -426,14 +475,14 @@ const AUTO={
   printing(){S.progress=0;const iv=setInterval(()=>{S.progress+=6+Math.random()*7;
     if(S.progress>=100){S.progress=100;clearInterval(iv);S.printError=(S.printScenario==='fail');after(500,()=>go('collect'));}
     const bar=document.getElementById('pbar');if(bar)bar.style.width=S.progress+'%';},240);timers.push(iv);},
-  thankyou(){after(5000,resetToAttract);}
+  collect(){if(S.idleMode!=='off')after(45000,resetToAttract);}
 };
 
 function beginCapture(){S.shotIndex=0;S.shots=[];S.capPhase='count';S.count=3;go('capture');}
 function resetToAttract(){clearIdle();S.step='attract';S.frame=null;S.qty=1;S.filter='none';S.shots=[];S.shotIndex=0;S.printError=false;S.progress=0;render();}
 
 function clearIdle(){clearTimeout(idleT);clearInterval(idleIV);idleT=null;idleIV=null;S.idleActive=false;const o=document.getElementById('idleOv');if(o)o.remove();}
-function armIdle(){clearTimeout(idleT);if(!IDLE_STEPS.has(S.step))return;idleT=setTimeout(triggerIdle,IDLE_MS);}
+function armIdle(){clearTimeout(idleT);if(S.idleMode==='off')return;if(!IDLE_STEPS.has(S.step))return;idleT=setTimeout(triggerIdle,IDLE_MS);}
 function triggerIdle(){
   if(S.idleActive)return;S.idleActive=true;idleCount=10;
   const toPrint=['preview','confirm'].includes(S.step);
@@ -480,7 +529,8 @@ screenEl.addEventListener('click',e=>{
   const act=el.getAttribute('data-act'),id=el.getAttribute('data-id');
   switch(act){
     case 'start':initCamera();go('frame');break;
-    case 'selframe':S.frame=JSON.parse(JSON.stringify(FRAMES.find(f=>f.id===id)));go('quantity');break;
+    case 'selframe':S.frame=JSON.parse(JSON.stringify(FRAMES.find(f=>f.id===id)));render();break;
+    case 'framenext':go('quantity');break;
     case 'back':{const b=BACK[S.step];if(b==='attract')resetToAttract();else if(b){S.step=b;render();}}break;
     case 'qtyminus':S.qty=Math.max(1,S.qty-1);render();break;
     case 'qtyplus':S.qty=Math.min(4,S.qty+1);render();break;
@@ -495,7 +545,6 @@ screenEl.addEventListener('click',e=>{
     case 'confirm':go('confirm');break;
     case 'confirmback':go('preview');break;
     case 'print':go('printing');break;
-    case 'finish':go('thankyou');break;
     case 'finish2':resetToAttract();break;
     case 'idlestay':clearIdle();armIdle();break;
     case 'idlereset':clearIdle();resetToAttract();break;
@@ -511,6 +560,7 @@ bindSeg('segOri','data-ori','orientation',()=>render());
 bindSeg('segMode','data-mode','mode',()=>{if(['pay','payproc','payfail'].includes(S.step))resetToAttract();else render();});
 bindSeg('segPay','data-pay','payScenario');
 bindSeg('segPrint','data-print','printScenario');
+bindSeg('segIdle','data-idle','idleMode',()=>{if(S.idleMode==='off')clearIdle();else armIdle();});
 document.getElementById('btnRestart').addEventListener('click',resetToAttract);
 document.getElementById('btnIdle').addEventListener('click',()=>{if(!IDLE_STEPS.has(S.step)){S.step='frame';S.frame=null;render();}setTimeout(triggerIdle,60);});
 document.getElementById('fab').addEventListener('click',()=>document.getElementById('panel').classList.toggle('show'));
