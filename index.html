@@ -427,7 +427,7 @@ const STEP={
       <div class="scr-main">
         <div class="h2">แต่งรูปของคุณ</div>
         <div class="preview-wrap">
-          <div class="preview-photo">${frameArt(S.frame,S.orientation==='portrait'?18:12.5)}</div>
+          <div class="preview-photo">${frameArt(S.frame,S.orientation==='portrait'?23:17.5)}</div>
           <div class="filter-list">${list}</div>
         </div>
       </div>
@@ -438,7 +438,7 @@ const STEP={
     return `<div class="scr-body">
       <div class="scr-main">
         <div class="h2">ยืนยันสั่งพิมพ์</div>
-        ${frameArt(S.frame,S.orientation==='portrait'?13:9.5)}
+        ${frameArt(S.frame,S.orientation==='portrait'?18:13)}
         <div class="sub">${S.frame.name} · ${S.qty} ชุด${S.mode==='paid'?' · '+total+' บาท':''}</div>
       </div>
       <div class="scr-cta"><button class="btn ghost" data-act="confirmback">ย้อนกลับ</button><button class="btn primary lg" data-act="print"><i class="ti ti-printer"></i>พิมพ์เลย</button></div>
@@ -457,7 +457,7 @@ const STEP={
         <div class="h1">${err?'ไฟล์พร้อมแล้ว ขอบคุณที่ใช้บริการ':'พิมพ์เสร็จแล้ว ขอบคุณที่ใช้บริการ'}</div>
         <div class="sub">${err?'เครื่องพิมพ์ขัดข้อง แต่สแกน QR เพื่อเก็บไฟล์ได้เลย':'หยิบรูปที่ช่องด้านล่าง แล้วสแกน QR เพื่อเก็บไฟล์'}</div>
         <div style="display:flex;gap:1.3em;align-items:center;flex-wrap:wrap;justify-content:center">
-          ${err?'':frameArt(S.frame,S.orientation==='portrait'?9.5:7.5)}
+          ${err?'':frameArt(S.frame,S.orientation==='portrait'?13:10.5)}
           <div class="qrbox"><div class="qrgen" data-qr="${DL}"></div><div class="qcap"><i class="ti ti-download"></i> ดาวน์โหลด</div></div>
         </div>
       </div>
