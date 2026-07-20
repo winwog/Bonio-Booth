@@ -79,20 +79,11 @@
 
   .landing{position:relative;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1em;cursor:pointer;padding:1em;}
   .lcenter{display:flex;flex-direction:column;align-items:center;gap:1em;}
-  .aper{position:relative;width:6.6em;height:6.6em;display:grid;place-items:center;}
-  .aper .ring{position:absolute;width:100%;height:100%;border-radius:50%;border:2px solid var(--accent);opacity:0;animation:ringpulse 4s ease-out infinite;}
-  .aper .ring.r2{animation-delay:2s;}
-  .aperblades{width:100%;height:100%;animation:breathe 6s ease-in-out infinite;}
-  .aperblades .dash{transform-origin:60px 60px;animation:spinslow 22s linear infinite;}
   .touch{font-family:"Bai Jamjuree",sans-serif;font-weight:700;font-size:2.1em;color:#fff;letter-spacing:.02em;text-shadow:0 2px 26px rgba(0,0,0,.6);animation:softpulse 3.4s ease-in-out infinite;}
   .touch-en{font-family:"Bai Jamjuree",sans-serif;font-weight:500;font-size:.8em;letter-spacing:.44em;color:rgba(255,255,255,.8);padding-left:.44em;margin-top:.15em;text-shadow:0 2px 16px rgba(0,0,0,.5);}
   .brandmark{position:absolute;bottom:1.6em;font-family:"Bai Jamjuree",sans-serif;font-weight:600;font-size:1em;letter-spacing:.22em;padding-left:.22em;
     color:rgba(255,255,255,.9);text-shadow:0 2px 16px rgba(0,0,0,.6);}
-  @keyframes spinslow{to{transform:rotate(360deg);}}
-  @keyframes breathe{0%,100%{transform:scale(1);}50%{transform:scale(1.03);}}
-  @keyframes sheenslow{to{background-position:200% center;}}
   @keyframes softpulse{0%,100%{opacity:.7;}50%{opacity:1;}}
-  @keyframes ringpulse{0%{transform:scale(.9);opacity:.5;}70%{transform:scale(1.25);opacity:0;}100%{opacity:0;}}
 
   .btn{font-family:"Bai Jamjuree",sans-serif;cursor:pointer;border:1px solid var(--stroke);background:var(--glass-2);color:var(--ink);
     padding:0 1.2em;border-radius:999px;font-size:.95em;font-weight:500;transition:transform .12s,background .2s,box-shadow .2s;white-space:nowrap;
@@ -110,24 +101,7 @@
   .pill.price{background:rgba(255,207,92,.16);border-color:rgba(255,207,92,.4);color:#ffdf9e;}
   .pill.free{background:rgba(94,234,212,.16);border-color:rgba(94,234,212,.4);color:#b6fff0;}
 
-  .frames{display:grid;gap:.8em;width:100%;}
-  .device.portrait .frames{grid-template-columns:repeat(2,1fr);}
-  .device.landscape .frames{grid-template-columns:repeat(4,1fr);}
-  .fcard{cursor:pointer;border-radius:1.1em;padding:.85em .7em;background:var(--glass);border:1px solid var(--stroke-soft);
-    display:flex;flex-direction:column;align-items:center;gap:.55em;transition:transform .14s,border-color .2s,background .2s;}
-  .fcard:hover{transform:translateY(-4px);background:var(--glass-2);border-color:var(--stroke);}
-  .fcard:active{transform:translateY(0);}
-  .mini{background:#fff;border-radius:.5em;padding:.34em;display:grid;gap:.26em;box-shadow:0 8px 20px rgba(0,0,0,.42);position:relative;}
-  .mini i{border-radius:.26em;background-size:cover;background-position:center;box-shadow:inset 0 0 0 1px rgba(0,0,0,.1);}
   .subcaps{font-family:"Bai Jamjuree",sans-serif;font-weight:500;font-size:.76em;letter-spacing:.28em;color:var(--ink-faint);margin-top:-.3em;}
-  .frame-strip{display:flex;gap:1.1em;overflow-x:auto;width:100%;padding:.8em .3em .9em;align-items:flex-start;}
-  .frame-strip::-webkit-scrollbar{height:6px;}
-  .frame-strip::-webkit-scrollbar-thumb{background:rgba(255,255,255,.28);border-radius:3px;}
-  .frame-thumb{position:relative;cursor:pointer;flex:0 0 auto;padding:.25em;border-radius:.6em;transition:.15s;}
-  .frame-thumb.on{background:rgba(122,168,255,.14);outline:2px solid var(--accent);}
-  .frame-thumb .fcheck{position:absolute;top:-.35em;left:-.35em;width:1.5em;height:1.5em;border-radius:50%;background:var(--accent);color:#0a0a1e;display:none;place-items:center;font-size:.9em;z-index:3;box-shadow:0 2px 6px rgba(0,0,0,.4);}
-  .frame-thumb.on .fcheck{display:grid;}
-  .frame-hero{display:flex;align-items:center;justify-content:center;padding:.3em 0 .6em;flex:0 0 auto;}
   .frameart{position:relative;background-size:100% 100%;background-repeat:no-repeat;border-radius:.2em;box-shadow:0 12px 28px rgba(0,0,0,.5);overflow:hidden;}
   .fa-photo{position:absolute;background-size:cover;background-position:center;}
   .fa-fx{position:absolute;pointer-events:none;}
@@ -187,17 +161,6 @@
   .sthumb{width:2.1em;height:2.1em;border-radius:.55em;border:1px solid var(--stroke-soft);background-size:cover;background-position:center;}
   .sthumb.empty{background:rgba(255,255,255,.07);}
 
-  .photo{background:#fff;border-radius:.6em;padding:.5em .5em .8em;box-shadow:0 16px 40px rgba(0,0,0,.5);display:inline-flex;flex-direction:column;gap:.4em;position:relative;transform:rotate(-2deg);}
-  .photo .cells{display:grid;gap:.32em;}
-  .photo .cells b{border-radius:.3em;display:block;background-size:cover;background-position:center;box-shadow:inset 0 0 0 1px rgba(0,0,0,.06);}
-  .photo .cap{font-family:"Bai Jamjuree",sans-serif;font-weight:600;font-size:.78em;color:#8b5cf6;text-align:center;letter-spacing:.04em;}
-  .photo .sticker{position:absolute;font-size:1.5em;filter:drop-shadow(0 3px 5px rgba(0,0,0,.25));}
-  .photo .st1{top:-.4em;right:-.3em;transform:rotate(12deg);}
-  .photo .st2{bottom:.3em;left:-.4em;transform:rotate(-10deg);}
-
-  .filters{display:flex;gap:.5em;flex-wrap:wrap;justify-content:center;}
-  .fchip{cursor:pointer;padding:.5em 1.05em;border-radius:999px;font-size:.92em;background:var(--glass);border:1px solid var(--stroke-soft);color:var(--ink-dim);transition:.15s;font-weight:500;}
-  .fchip.on{background:#fff;color:#1a1030;border-color:transparent;}
   .editor-photo{flex:0 0 auto;}
   .editor-tray{width:100%;display:flex;flex-direction:column;gap:.35em;flex:0 0 auto;}
   .edit-tabs{display:flex;gap:.4em;justify-content:center;flex:0 0 auto;}
@@ -312,6 +275,38 @@
 </div>
 
 <script>
+/* ── Architecture ──────────────────────────────────────────────────────
+   S        single mutable state object (current step, selections, etc).
+   STEP     one function per screen name, returns that screen's HTML string.
+   AUTO     per-step async side effects (spinners, auto-advance) — keyed by
+            step name, called from render() *after* the DOM is in place.
+            Only schedule after()/setInterval from inside an AUTO handler:
+            render() clears all pending timers first, so anything scheduled
+            earlier is wiped before it can fire.
+   render() clears timers → sets device/orientation classes → injects
+            chrome()+STEP[S.step]() → re-attaches camera/QR → runs
+            AUTO[S.step]() → re-arms the idle timer.
+   go(step) sets S.step and calls render(); most click handlers use this.
+   JOURNEY  step order for the top progress bar; transient steps (payproc,
+            payfail, voucher) borrow their parent step's position in chrome().
+   BACK / IDLE_STEPS  which steps show a back-chevron / arm the idle timeout.
+   frameArt(frame, heightEm)  renders one photo strip: the frame's SVG as
+            background, photos positioned into its slot rectangles, plus the
+            active theme filter / effect overlay / stickers on top.
+
+   PROTOTYPE-ONLY — needs real backend wiring before production:
+   - Payment (pay → payproc → getready|payfail) is a timed fake driven by
+     the stakeholder panel's payScenario, not a real payment gateway.
+   - Voucher validation (voucherscan / resolveVoucherOutcome) is driven by
+     the panel's voucherScenario — there is no real voucher/coupon service.
+   - Printing (STEP.printing / AUTO.printing) fakes a progress bar and
+     resolves via printScenario — there is no real printer integration.
+   - QR codes point at DL = a fake `bonio.pics/<random>` URL; nothing is
+     actually uploaded anywhere for guests to download.
+   - Camera capture falls back to SAMPLE (stock placeholder faces) when
+     getUserMedia is unavailable/denied — expected for kiosk hardware,
+     but the fallback path itself should not ship to production.
+   ────────────────────────────────────────────────────────────────────── */
 const FRAMES=[
   {id:'s2',name:'2 ช่อง',file:'Frames/Slot-1.2x6 (3 images)-1.svg',W:600,H:1800,slots:[[40,40,520,640],[40,720,520,640]]},
   {id:'s3',name:'3 ช่อง',file:'Frames/Slot-2.2x6 (3 images).svg',W:600,H:1800,slots:[[40,40,520,413.333],[40,493.333,520,413.333],[40,946.667,520,413.333]]},
@@ -428,9 +423,6 @@ function chrome(){let idx=JOURNEY.indexOf(S.step);if(S.step==='payproc'||S.step=
   return `<div class="scr-prog"><b style="width:${pct}%"></b></div>
   <div class="scr-top"><div class="l">${back}<i class="ti ti-aperture"></i>bonio</div>
   <div class="r"><i class="ti ti-wifi"></i><i class="ti ti-battery-3"></i><span>${clock()}</span></div></div>`;}
-function miniLayout(f){let c='';for(let i=0;i<f.shots;i++)c+='<i style="background:'+sampleBg(i)+'"></i>';
-  const u=1.35,w=(f.cols*u+0.55).toFixed(2),h=(f.rows*u+0.55).toFixed(2);
-  return `<div class="mini" style="width:${w}em;height:${h}em;grid-template-columns:repeat(${f.cols},1fr);grid-template-rows:repeat(${f.rows},1fr)">${c}</div>`;}
 function frameArt(f,h){
   const showOrig=S.showOriginal;
   const fil=showOrig?'none':THEMES.find(x=>x.id===S.theme).css;
@@ -446,10 +438,6 @@ function frameArt(f,h){
   if(!showOrig)S.stickers.forEach(pid=>{const pack=STICKER_PACKS.find(p=>p.id===pid);if(!pack)return;
     pack.items.forEach(it=>{stk+='<span class="fa-sticker" style="left:'+it.l+'%;top:'+it.t+'%;width:'+it.s+'em;height:'+it.s+'em;transform:translate(-50%,-50%) rotate('+it.r+'deg)">'+it.svg+'</span>';});});
   return '<div class="frameart" style="width:'+w+'em;height:'+h+'em;background-image:url(\''+encodeURI(f.file)+'\')">'+ph+stk+'</div>';}
-function photoComposite(cellOverride){const f=S.frame,fil=THEMES.find(x=>x.id===S.theme).css;
-  const cell=cellOverride||(f.rows>=4?2.4:(f.rows===3?2.9:3.3));let c='';
-  for(let i=0;i<f.shots;i++)c+='<b style="background:'+(S.shots[i]||sampleBg(i))+';filter:'+fil+';width:'+cell+'em;height:'+cell+'em"></b>';
-  return '<div class="photo"><div class="cells" style="grid-template-columns:repeat('+f.cols+','+cell+'em);grid-auto-rows:'+cell+'em">'+c+'</div><div class="cap">bonio · '+new Date().toLocaleDateString('th-TH',{day:'2-digit',month:'2-digit',year:'2-digit'})+'</div></div>';}
 
 const STEP={
   attract(){return `<div class="landing" data-act="start">

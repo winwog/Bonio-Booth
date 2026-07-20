@@ -45,24 +45,40 @@ Look for the `<script>` near the bottom. Key pieces:
   `file`, its `W`/`H` (viewBox size), and `slots` (the photo windows as
   `[x, y, width, height]` in the SVG's own units). `shots` is set automatically
   from the number of slots.
-- **`FILTERS`** — the filter options (ต้นฉบับ / ขาวดำ / วินเทจ / สดใส), each a CSS filter.
+- **`THEMES`** — the 12 color-grade presets on the preview screen's "ธีม" tab
+  (ต้นฉบับ / ขาวดำ / วินเทจ / สดใส / ...), each a CSS `filter` string. Only one
+  theme is active at a time.
+- **`EFFECTS`** — the 6 overlay looks on the "เอฟเฟกต์" tab (แสงรั่ว / ฟิล์มเกรน /
+  วิญเยตต์ / ...), each a CSS gradient/blend-mode layer (not a filter). Only
+  one effect is active at a time.
+- **`STICKER_PACKS`** — the 4 sticker sets on the "สติกเกอร์" tab, each an
+  array of small inline-SVG shapes with position/scale/rotation. Multiple
+  packs can be toggled on independently, and stack with the theme + effect.
 - **`S`** — the "state" object: what the app currently remembers
-  (orientation, selected frame, quantity, filter, which shot, etc.).
+  (orientation, selected frame, quantity, theme/effect/stickers, which shot,
+  voucher state, etc.).
 - **`STEP`** — one function per screen (attract, frame, quantity, pay,
-  getready, capture, preview, confirm, printing, collect). Each returns the
-  HTML for that screen.
+  voucher, getready, capture, preview, printing, collect — plus the transient
+  payproc/payfail states). Each returns the HTML for that screen. Preview
+  goes straight to printing now; there's no separate "confirm" screen.
 - **`render()`** — draws the current screen. Every screen is
   `scr-main` (centered content) + `scr-cta` (the bottom button zone).
 - **`frameArt(frame, heightInEm)`** — draws a frame: loads its SVG as the
-  background and drops the photos into the white windows using the slot
-  coordinates. This is what makes the strip look real.
+  background, drops the photos into the white windows using the slot
+  coordinates, and layers on the active theme/effect/stickers. This is what
+  makes the strip look real.
 - **`AUTO`** — things that happen automatically on a screen (countdowns,
-  payment/print simulation, auto-return home).
+  payment/voucher/print simulation, auto-return home).
 - **Idle timeout** — auto-resets the booth if nobody touches it. On the
-  preview/confirm screens it auto-prints instead of discarding.
+  preview screen it auto-prints instead of discarding.
+- **Voucher flow** (pay screen, paid mode only) — "ใช้วอเชอร์ / โค้ดส่วนลด" opens
+  a camera-scan mock; the result is driven by the stakeholder panel's
+  voucher scenario selector, not a real voucher service (see the
+  PROTOTYPE-ONLY note at the top of the `<script>`).
 - **Stakeholder panel** — the ⚙ button (bottom-right) opens a hidden test
   panel: orientation, paid/free, payment success/fail, print success/fail,
-  and idle timeout on/off. Hidden by default so demos look clean.
+  voucher scenario, and idle timeout on/off. Hidden by default so demos
+  look clean.
 
 ---
 
