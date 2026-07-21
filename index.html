@@ -224,8 +224,8 @@
   .seg{display:inline-flex;padding:4px;border-radius:999px;background:rgba(0,0,0,.3);border:1px solid var(--stroke-soft);}
   .seg button{font-family:inherit;border:0;background:transparent;color:var(--ink-dim);padding:8px 12px;border-radius:999px;cursor:pointer;font-size:12.5px;transition:.15s;flex:1;display:flex;align-items:center;justify-content:center;gap:5px;font-weight:500;}
   .seg button.on{background:rgba(255,255,255,.94);color:#1a1030;font-weight:600;}
-  .seg.good button.on{background:var(--mint);color:#053b32;}
-  .seg.bad button.on{background:var(--pink);color:#450b1f;}
+  .seg button.on[data-pay="success"],.seg button.on[data-print="success"]{background:var(--mint);color:#053b32;}
+  .seg button.on[data-pay="fail"],.seg button.on[data-print="fail"]{background:var(--pink);color:#450b1f;}
   .seg.multi{flex-wrap:wrap;border-radius:14px;gap:4px;}
   .seg.multi button{flex:1 1 28%;border-radius:10px;padding:7px 4px;font-size:11px;}
   .panel .restart{font-family:"Bai Jamjuree",sans-serif;border:1px solid var(--stroke-soft);background:var(--glass);color:var(--ink);padding:10px;border-radius:12px;cursor:pointer;font-size:13.5px;display:flex;align-items:center;justify-content:center;gap:6px;}
@@ -257,9 +257,9 @@
   <div class="row"><label>โหมดร้าน</label>
     <div class="seg" id="segMode"><button data-mode="paid" class="on">มีจ่ายเงิน</button><button data-mode="free">ฟรี/event</button></div></div>
   <div class="row"><label>ผลการจ่ายเงิน</label>
-    <div class="seg good" id="segPay"><button data-pay="success" class="on">สำเร็จ</button><button data-pay="fail">ไม่สำเร็จ</button></div></div>
+    <div class="seg" id="segPay"><button data-pay="success" class="on">สำเร็จ</button><button data-pay="fail">ไม่สำเร็จ</button></div></div>
   <div class="row"><label>ผลการพิมพ์</label>
-    <div class="seg good" id="segPrint"><button data-print="success" class="on">สำเร็จ</button><button data-print="fail">ขัดข้อง</button></div></div>
+    <div class="seg" id="segPrint"><button data-print="success" class="on">สำเร็จ</button><button data-print="fail">ขัดข้อง</button></div></div>
   <div class="row"><label>วอเชอร์ (จำลองสแกน)</label>
     <div class="seg multi" id="segVoucher">
       <button data-voucher="free" class="on">ฟรี</button>
